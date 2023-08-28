@@ -14,9 +14,13 @@ function errorHandler(err, req, res, next) {
       statusCode = 401;
       message = "Invalid username/password";
       break;
-    case "JSONWebToken":
+    case "JsonWebTokenError":
       statusCode = 401;
       message = "Invalid token";
+      break;
+    case "TokenExpiredError":
+      statusCode = 401;
+      message = "Token has expired";
       break;
     case "Unauthorized":
       statusCode = 401;

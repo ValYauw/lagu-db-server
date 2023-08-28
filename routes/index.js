@@ -6,8 +6,8 @@ const ArtistController = require('../controllers/artistController');
 const AlbumController = require('../controllers/albumController');
 const SearchController = require('../controllers/searchController');
 
-// const authentication = require('./middleware/authentication');
-// const authorization = require('./middleware/authorization');
+const authentication = require('../middleware/authentication');
+const { authorizeAdmin, authorizeStaff } = require('../middleware/authorization');
 
 router.get('/', (req, res) => {
   res.send('Welcome to the API entrypoint');
@@ -37,36 +37,38 @@ router.get('/search/songs', SearchController.searchSongs);
 router.get('/search/albums', SearchController.searchAlbums);
 router.get('/search/artists', SearchController.searchArtists);
 
+router.use(authentication);
+
 /* 
  * POST METHODS
  */
-// router.post('/genres', GenreController.addGenre);
-router.post('/songs', SongController.addSong);
-router.post('/songs/:id/genres/:genreId', SongController.addSongGenre);
-router.post('/songs/:id/playlinks', SongController.addPlayLink);
-router.post('/songs/:id/artists/:artistId', SongController.addSongArtist);
-router.post('/artists', ArtistController.addArtist);
-router.post('/artists/:id/links', ArtistController.addArtistLink);
+// router.post('/genres', authorizeStaff, GenreController.addGenre);
+router.post('/songs', authorizeStaff, SongController.addSong);
+router.post('/songs/:id/genres/:genreId', authorizeStaff, SongController.addSongGenre);
+router.post('/songs/:id/playlinks', authorizeStaff, SongController.addPlayLink);
+router.post('/songs/:id/artists/:artistId', authorizeStaff, SongController.addSongArtist);
+router.post('/artists', authorizeStaff, ArtistController.addArtist);
+router.post('/artists/:id/links', authorizeStaff, ArtistController.addArtistLink);
 
 /* 
  * PUT & PATCH METHODS
  */
 // router.put('/genres/:id', GenreController.editGenre);
-router.put('/songs/:id', SongController.editSong);
-router.put('/songs/:id/playlinks/:playLinkId', SongController.editPlayLinkStatus);
-router.put('/songs/:id/artists/:artistId', SongController.editSongArtistRole);
-router.put('/artists/:id', ArtistController.editArtist);
-// router.put('/artists/:id/links', ArtistController.editArtistLink);
+router.put('/songs/:id', authorizeStaff, SongController.editSong);
+router.put('/songs/:id/playlinks/:playLinkId', authorizeStaff, SongController.editPlayLinkStatus);
+router.put('/songs/:id/artists/:artistId', authorizeStaff, SongController.editSongArtistRole);
+router.put('/artists/:id', authorizeStaff, ArtistController.editArtist);
+// router.put('/artists/:id/links', authorizeStaff, ArtistController.editArtistLink);
 
 /* 
  * DELETE METHODS
  */
 // router.delete('/genres/:id', GenreController.deleteGenre);
-router.delete('/songs/:id', SongController.deleteSong);
-router.delete('/songs/:id/genres/:genreId', SongController.deleteSongGenre);
-router.delete('/songs/:id/playlinks/:playLinkId', SongController.deletePlayLink);
-router.delete('/songs/:id/artists/:artistId', SongController.deleteSongArtist);
-router.delete('/artists/:id', ArtistController.deleteArtist);
-router.delete('/artists/:id/links/:linkId', ArtistController.deleteArtistLink);
+router.delete('/songs/:id', authorizeAdmin, SongController.deleteSong);
+router.delete('/songs/:id/genres/:genreId', authorizeAdmin, SongController.deleteSongGenre);
+router.delete('/songs/:id/playlinks/:playLinkId', authorizeAdmin, SongController.deletePlayLink);
+router.delete('/songs/:id/artists/:artistId', authorizeAdmin, SongController.deleteSongArtist);
+router.delete('/artists/:id', authorizeAdmin, ArtistController.deleteArtist);
+router.delete('/artists/:id/links/:linkId', authorizeAdmin, ArtistController.deleteArtistLink);
 
 module.exports = router;
