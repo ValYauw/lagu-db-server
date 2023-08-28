@@ -36,7 +36,7 @@ class SearchController {
   static async processLimitAndOffset(req, res, next) {
     let { limit, offset } = req.query;
     offset = +offset || 0;
-    limit = limit || process.env.NUM_RECORDS_PER_QUERY;
+    limit = limit || 20;
     if (isNaN(limit) || isNaN(offset)) throw {name: 'BadCredentials'};
     if (limit > 100) limit = 100;
 
