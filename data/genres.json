@@ -1,0 +1,109 @@
+[
+  {
+    "id": 1,
+    "name": "Pop"
+  },
+  {
+    "id": 2,
+    "name": "Rock"
+  },
+  {
+    "id": 3,
+    "name": "Metal"
+  },
+  {
+    "id": 4,
+    "name": "Electronic"
+  },
+  {
+    "id": 5,
+    "name": "Country"
+  },
+  {
+    "id": 6,
+    "name": "Folk"
+  },
+  {
+    "id": 7,
+    "name": "Children's Music"
+  },
+  {
+    "id": 8,
+    "name": "VOCALOID"
+  },
+  {
+    "id": 9,
+    "name": "Industrial",
+    "parentId": 4
+  },
+  {
+    "id": 10,
+    "name": "Dubstep",
+    "parentId": 4
+  },
+  {
+    "id": 11,
+    "name": "House",
+    "parentId": 4
+  },
+  {
+    "id": 12,
+    "name": "Dub",
+    "parentId": 4
+  },
+  {
+    "id": 13,
+    "name": "Trap",
+    "parentId": 4
+  },
+  {
+    "id": 14,
+    "name": "Noise",
+    "parentId": 4
+  },
+  {
+    "id": 15,
+    "name": "Experimental",
+    "parentId": 4
+  },
+  {
+    "id": 16,
+    "name": "K-Pop",
+    "parentId": 1
+  },
+  {
+    "id": 17,
+    "name": "C-Pop",
+    "parentId": 1
+  },
+  {
+    "id": 18,
+    "name": "J-Pop",
+    "parentId": 1
+  },
+  {
+    "id": 19,
+    "name": "Hard Rock",
+    "parentId": 2
+  },
+  {
+    "id": 20,
+    "name": "Punk",
+    "parentId": 2
+  },
+  {
+    "id": 21,
+    "name": "Industrial Rock",
+    "parentId": 2
+  },
+  {
+    "id": 22,
+    "name": "Post Rock",
+    "parentId": 2
+  },
+  {
+    "id": 23,
+    "name": "Shoegaze",
+    "parentId": 2
+  }
+]

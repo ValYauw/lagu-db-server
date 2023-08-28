@@ -1,0 +1,206 @@
+[
+  {
+    "id": 1,
+    "SongId": 1,
+    "ArtistId": 1,
+    "role": "Vocalist"
+  },
+  {
+    "id": 2,
+    "SongId": 1,
+    "ArtistId": 2,
+    "role": "Composer"
+  },
+  {
+    "id": 3,
+    "SongId": 2,
+    "ArtistId": 1,
+    "role": "Vocalist"
+  },
+  {
+    "id": 4,
+    "SongId": 2,
+    "ArtistId": 2,
+    "role": "Composer"
+  },
+  {
+    "id": 5,
+    "SongId": 3,
+    "ArtistId": 1,
+    "role": "Vocalist"
+  },
+  {
+    "id": 6,
+    "SongId": 3,
+    "ArtistId": 2,
+    "role": "Composer"
+  },
+  {
+    "id": 7,
+    "SongId": 4,
+    "ArtistId": 1,
+    "role": "Vocalist"
+  },
+  {
+    "id": 8,
+    "SongId": 4,
+    "ArtistId": 2,
+    "role": "Composer"
+  },
+  {
+    "id": 9,
+    "SongId": 5,
+    "ArtistId": 1,
+    "role": "Vocalist"
+  },
+  {
+    "id": 10,
+    "SongId": 5,
+    "ArtistId": 2,
+    "role": "Composer"
+  },
+  {
+    "id": 11,
+    "SongId": 6,
+    "ArtistId": 1,
+    "role": "Vocalist"
+  },
+  {
+    "id": 12,
+    "SongId": 6,
+    "ArtistId": 2,
+    "role": "Composer"
+  },
+  {
+    "id": 13,
+    "SongId": 7,
+    "ArtistId": 1,
+    "role": "Vocalist"
+  },
+  {
+    "id": 14,
+    "SongId": 7,
+    "ArtistId": 2,
+    "role": "Composer"
+  },
+  {
+    "id": 15,
+    "SongId": 8,
+    "ArtistId": 1,
+    "role": "Vocalist"
+  },
+  {
+    "id": 16,
+    "SongId": 8,
+    "ArtistId": 2,
+    "role": "Composer"
+  },
+  {
+    "id": 17,
+    "SongId": 9,
+    "ArtistId": 1,
+    "role": "Vocalist"
+  },
+  {
+    "id": 18,
+    "SongId": 9,
+    "ArtistId": 2,
+    "role": "Composer"
+  },
+  {
+    "id": 19,
+    "SongId": 10,
+    "ArtistId": 1,
+    "role": "Vocalist"
+  },
+  {
+    "id": 20,
+    "SongId": 10,
+    "ArtistId": 2,
+    "role": "Composer"
+  },
+  {
+    "id": 21,
+    "SongId": 11,
+    "ArtistId": 1,
+    "role": "Vocalist"
+  },
+  {
+    "id": 22,
+    "SongId": 11,
+    "ArtistId": 2,
+    "role": "Composer"
+  },
+  {
+    "id": 23,
+    "SongId": 12,
+    "ArtistId": 1,
+    "role": "Vocalist"
+  },
+  {
+    "id": 24,
+    "SongId": 12,
+    "ArtistId": 2,
+    "role": "Composer"
+  },
+  {
+    "id": 25,
+    "SongId": 13,
+    "ArtistId": 1,
+    "role": "Vocalist"
+  },
+  {
+    "id": 26,
+    "SongId": 13,
+    "ArtistId": 2,
+    "role": "Composer"
+  },
+  {
+    "id": 27,
+    "SongId": 14,
+    "ArtistId": 1,
+    "role": "Vocalist"
+  },
+  {
+    "id": 28,
+    "SongId": 14,
+    "ArtistId": 2,
+    "role": "Composer"
+  },
+  {
+    "id": 29,
+    "SongId": 15,
+    "ArtistId": 3,
+    "role": "Vocalist & Composer"
+  },
+  {
+    "id": 30,
+    "SongId": 16,
+    "ArtistId": 3,
+    "role": "Vocalist & Composer"
+  },
+  {
+    "id": 31,
+    "SongId": 17,
+    "ArtistId": 3,
+    "role": "Vocalist & Composer"
+  },
+  {
+    "id": 32,
+    "SongId": 18,
+    "ArtistId": 3,
+    "role": "Vocalist & Composer"
+  },
+  {
+    "id": 33,
+    "SongId": 19,
+    "ArtistId": 3,
+    "role": "Vocalist & Composer"
+  },
+  {
+    "id": 34,
+    "SongId": 20,
+    "ArtistId": 3,
+    "role": "Vocalist & Composer"
+  }
+ ]

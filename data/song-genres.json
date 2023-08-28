@@ -1,0 +1,227 @@
+[
+  {
+    "id": 1,
+    "SongId": 1,
+    "GenreId": 8
+  },
+  {
+    "id": 2,
+    "SongId": 1,
+    "GenreId": 4
+  },
+  {
+    "id": 3,
+    "SongId": 1,
+    "GenreId": 18
+  },
+  {
+    "id": 4,
+    "SongId": 2,
+    "GenreId": 8
+  },
+  {
+    "id": 5,
+    "SongId": 2,
+    "GenreId": 4
+  },
+  {
+    "id": 6,
+    "SongId": 2,
+    "GenreId": 18
+  },
+  {
+    "id": 7,
+    "SongId": 3,
+    "GenreId": 8
+  },
+  {
+    "id": 8,
+    "SongId": 3,
+    "GenreId": 4
+  },
+  {
+    "id": 9,
+    "SongId": 3,
+    "GenreId": 18
+  },
+  {
+    "id": 10,
+    "SongId": 4,
+    "GenreId": 8
+  },
+  {
+    "id": 11,
+    "SongId": 4,
+    "GenreId": 4
+  },
+  {
+    "id": 12,
+    "SongId": 4,
+    "GenreId": 18
+  },
+  {
+    "id": 13,
+    "SongId": 5,
+    "GenreId": 8
+  },
+  {
+    "id": 14,
+    "SongId": 5,
+    "GenreId": 4
+  },
+  {
+    "id": 15,
+    "SongId": 5,
+    "GenreId": 18
+  },
+  {
+    "id": 16,
+    "SongId": 6,
+    "GenreId": 8
+  },
+  {
+    "id": 17,
+    "SongId": 6,
+    "GenreId": 4
+  },
+  {
+    "id": 18,
+    "SongId": 6,
+    "GenreId": 18
+  },
+  {
+    "id": 19,
+    "SongId": 7,
+    "GenreId": 8
+  },
+  {
+    "id": 20,
+    "SongId": 7,
+    "GenreId": 4
+  },
+  {
+    "id": 21,
+    "SongId": 7,
+    "GenreId": 18
+  },
+  {
+    "id": 22,
+    "SongId": 8,
+    "GenreId": 8
+  },
+  {
+    "id": 23,
+    "SongId": 8,
+    "GenreId": 4
+  },
+  {
+    "id": 24,
+    "SongId": 8,
+    "GenreId": 18
+  },
+  {
+    "id": 25,
+    "SongId": 9,
+    "GenreId": 8
+  },
+  {
+    "id": 26,
+    "SongId": 9,
+    "GenreId": 4
+  },
+  {
+    "id": 27,
+    "SongId": 9,
+    "GenreId": 18
+  },
+  {
+    "id": 28,
+    "SongId": 10,
+    "GenreId": 8
+  },
+  {
+    "id": 29,
+    "SongId": 10,
+    "GenreId": 4
+  },
+  {
+    "id": 30,
+    "SongId": 10,
+    "GenreId": 18
+  },
+  {
+    "id": 31,
+    "SongId": 11,
+    "GenreId": 8
+  },
+  {
+    "id": 32,
+    "SongId": 11,
+    "GenreId": 4
+  },
+  {
+    "id": 33,
+    "SongId": 11,
+    "GenreId": 18
+  },
+  {
+    "id": 34,
+    "SongId": 12,
+    "GenreId": 8
+  },
+  {
+    "id": 35,
+    "SongId": 12,
+    "GenreId": 4
+  },
+  {
+    "id": 36,
+    "SongId": 12,
+    "GenreId": 18
+  },
+  {
+    "id": 37,
+    "SongId": 13,
+    "GenreId": 8
+  },
+  {
+    "id": 38,
+    "SongId": 13,
+    "GenreId": 4
+  },
+  {
+    "id": 39,
+    "SongId": 13,
+    "GenreId": 18
+  },
+  {
+    "id": 40,
+    "SongId": 14,
+    "GenreId": 8
+  },
+  {
+    "id": 41,
+    "SongId": 14,
+    "GenreId": 4
+  },
+  {
+    "id": 42,
+    "SongId": 14,
+    "GenreId": 18
+  },
+  {
+    "id": 43,
+    "SongId": 15,
+    "GenreId": 8
+  },
+  {
+    "id": 44,
+    "SongId": 15,
+    "GenreId": 4
+  },
+  {
+    "id": 45,
+    "SongId": 15,
+    "GenreId": 18
+  }
+ ]

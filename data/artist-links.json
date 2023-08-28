@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "webURL": "https://en.wikipedia.org/wiki/Hatsune_Miku",
+    "description": "Wikipedia",
+    "ArtistId": 1
+  },
+  {
+    "id": 2,
+    "webURL": "https://ec.crypton.co.jp/pages/prod/vocaloid/mikuv4x",
+    "description": "Official webpage (JP)",
+    "ArtistId": 1
+  },
+  {
+    "id": 3,
+    "webURL": "https://www.youtube.com/channel/UChsXqcSV1YRwQbfHfzCMG2Q",
+    "description": "YouTube Channel",
+    "ArtistId": 2
+  },
+  {
+    "id": 4,
+    "webURL": "https://www.nicovideo.jp/user/11912389",
+    "description": "Niconico Channel",
+    "ArtistId": 2
+  },
+  {
+    "id": 5,
+    "webURL": "https://piapro.jp/wowaka",
+    "description": "Piapro",
+    "ArtistId": 2
+  },
+  {
+    "id": 6,
+    "webURL": "https://open.spotify.com/artist/65MYE6R7PCyVAhHrQploNT",
+    "description": "Spotify",
+    "ArtistId": 2
+  },
+  {
+    "id": 7,
+    "webURL": "https://eveofficial.com/",
+    "description": "Official webpage (JP)",
+    "ArtistId": 3
+  },
+  {
+    "id": 8,
+    "webURL": "https://www.youtube.com/user/ooo0eve0ooo",
+    "description": "YouTube Channel",
+    "ArtistId": 3
+  },
+  {
+    "id": 9,
+    "webURL": "https://www.nicovideo.jp/user/10103681",
+    "description": "Niconico Channel",
+    "ArtistId": 3
+  }
+ ]

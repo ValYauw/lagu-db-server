@@ -1,0 +1,21 @@
+[
+  {
+    "id": 1,
+    "name": "初音ミク",
+    "aliases": ["Hatsune Miku"],
+    "imageURL": "",
+    "description": "A Japanese female voicebank released for the vocal synthesizer software VOCALOID by Crypton Future Media."
+  },
+  {
+    "id": 2,
+    "name": "wowaka",
+    "imageURL": "",
+    "description": "A Japanese musician who was active in the early VOCALOID scene in the years 2009-2011. Most notable for the songs 'Rolling Girl'."
+  },
+  {
+    "id": 3,
+    "name": "Eve",
+    "imageURL": "",
+    "description": "A Japanese musician. Notable for his energetic rock style and vibrant animation style on his music videos."
+  }
+ ]

@@ -1,0 +1,142 @@
+[
+  {
+    "id": 1,
+    "name": "ローリンガール",
+    "aliases": ["Rolling Girl"],
+    "releaseDate": "14-02-10",
+    "songType": "Original"
+  },
+  {
+    "id": 2,
+    "name": "とおせんぼ",
+    "aliases": ["Toosenbo"],
+    "releaseDate": "16-06-09",
+    "songType": "Original"
+  },
+  {
+    "id": 3,
+    "name": "裏表ラバーズ",
+    "aliases": ["Ura Omote Lovers", "Two-Faced Lovers"],
+    "releaseDate": "29-08-09",
+    "songType": "Original"
+  },
+  {
+    "id": 4,
+    "name": "ワールズエンド・ダンスホール",
+    "aliases": ["World's End Dancehall"],
+    "releaseDate": "17-05-10",
+    "songType": "Original"
+  },
+  {
+    "id": 5,
+    "name": "アンハッピーリフレイン",
+    "aliases": ["Unhappy Refrain"],
+    "releaseDate": "02-05-11",
+    "songType": "Original"
+  },
+  {
+    "id": 6,
+    "name": "積み木の人形",
+    "aliases": ["Tsumiki no Ningyou"],
+    "releaseDate": "02-12-09",
+    "songType": "Original"
+  },
+  {
+    "id": 7,
+    "name": "僕のサイノウ",
+    "aliases": ["Boku no Sainou"],
+    "releaseDate": "13-07-09",
+    "songType": "Original"
+  },
+  {
+    "id": 8,
+    "name": "日常と地球の額縁",
+    "aliases": ["Nichijou to Chikyuu no Gakubuchi"],
+    "releaseDate": "18-05-11",
+    "songType": "Original"
+  },
+  {
+    "id": 9,
+    "name": "テノヒラ",
+    "aliases": ["Tenohira"],
+    "releaseDate": "24-05-09",
+    "songType": "Original"
+  },
+  {
+    "id": 10,
+    "name": "ラインアート",
+    "aliases": ["Lineart"],
+    "releaseDate": "07-06-09",
+    "songType": "Original"
+  },
+  {
+    "id": 11,
+    "name": "グレーゾーンにて。",
+    "aliases": ["Grey Zone nite."],
+    "releaseDate": "11-05-09",
+    "songType": "Original"
+  },
+  {
+    "id": 12,
+    "name": "ずれていく",
+    "aliases": ["Zureteiku"],
+    "releaseDate": "23-10-09",
+    "songType": "Original"
+  },
+  {
+    "id": 13,
+    "name": "リバシブルドール",
+    "aliases": ["Reversible Doll"],
+    "releaseDate": "14-10-10",
+    "songType": "Original"
+  },
+  {
+    "id": 14,
+    "name": "プリズムキューブ",
+    "aliases": ["Prism Cube"],
+    "releaseDate": "18-05-11",
+    "songType": "Original"
+  },
+  {
+    "id": 15,
+    "name": "ドラマツルギー",
+    "aliases": ["Dramaturgy"],
+    "releaseDate": "11-10-17",
+    "songType": "Original"
+  },
+  {
+    "id": 16,
+    "name": "ナンセンス文学",
+    "aliases": ["Nonsense Bungaku", "Literary Nonsense"],
+    "releaseDate": "20-05-17",
+    "songType": "Original"
+  },
+  {
+    "id": 17,
+    "name": "お気に召すまま",
+    "aliases": ["Oki ni Mesu mama", "As You Like It"],
+    "releaseDate": "29-11-17",
+    "songType": "Original"
+  },
+  {
+    "id": 18,
+    "name": "トーキョーゲットー",
+    "aliases": ["Tokyo Ghetto"],
+    "releaseDate": "06-07-18",
+    "songType": "Original"
+  },
+  {
+    "id": 19,
+    "name": "ラストダンス",
+    "aliases": ["Last Dance"],
+    "releaseDate": "14-12-18",
+    "songType": "Original"
+  },
+  {
+    "id": 20,
+    "name": "アウトサイダー",
+    "aliases": ["Outsider"],
+    "releaseDate": "07-04-18",
+    "songType": "Original"
+  }
+ ]
