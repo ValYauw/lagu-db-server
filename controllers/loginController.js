@@ -8,8 +8,8 @@ class Controller {
 
   static async login(req, res, next) {
     try {
-      const { username, password } = req.body;
-      const user = await User.findOne({where: {username}});
+      const { email, password } = req.body;
+      const user = await User.findOne({where: {email}});
       if (!user) throw { name: 'InvalidLogin' };
       if (!compare(password, user.password)) throw { name: 'InvalidLogin' };
       const accessToken = signToken({

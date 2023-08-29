@@ -2,7 +2,7 @@ const {
   User,
   Genre, Song, Artist, Album,
   SongGenre, SongArtist, AlbumSong,
-  PlayLink, ArtistLink, sequelize
+  PlayLink, ArtistLink, TimedLyrics, sequelize
 } = require("../models");
 
 class SongController {
@@ -30,7 +30,7 @@ class SongController {
           // },
           {
             model: Artist,
-            attributes: ['id', 'name'],
+            attributes: ['id', 'name', 'aliases'],
             through: {attributes: []}
           },
           {
@@ -86,6 +86,10 @@ class SongController {
           {
             model: PlayLink,
             attributes: ['id', 'songURL', 'isInactive']
+          },
+          {
+            model: TimedLyrics,
+            attributes: ['id', 'timedLyrics']
           }
         ]
       });
