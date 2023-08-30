@@ -6,6 +6,7 @@ const SongController = require('../controllers/songController');
 const ArtistController = require('../controllers/artistController');
 const AlbumController = require('../controllers/albumController');
 const SearchController = require('../controllers/searchController');
+const ExtLibraryController = require('../controllers/extLibraryController');
 
 const authentication = require('../middleware/authentication');
 const { authorizeAdmin, authorizeStaff } = require('../middleware/authorization');
@@ -41,6 +42,9 @@ router.get('/albums/:id', AlbumController.getAlbumById);
 router.get('/search/songs', SearchController.searchSongs);
 router.get('/search/albums', SearchController.searchAlbums);
 router.get('/search/artists', SearchController.searchArtists);
+
+// API
+router.get('/youtube/artists', ExtLibraryController.getArtistYouTubeData);
 
 router.use(authentication);
 
