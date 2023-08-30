@@ -9,6 +9,10 @@ function errorHandler(err, req, res, next) {
       statusCode = 400;
       message = "Bad Credentials";
       break;
+    case "NotSuccessful":
+      statusCode = 500;
+      message = "The API call was not successful";
+      break;
 
     case "InvalidLogin":
       statusCode = 401;
