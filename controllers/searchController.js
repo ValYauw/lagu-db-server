@@ -12,17 +12,18 @@ class SearchController {
 
     let [{count}] = await sequelize.query(`
     SELECT COUNT(DISTINCT("id"))::INTEGER FROM
-    (SELECT "id", "name", unnest("aliases") AS "alias" FROM "${tableName}") AS "flat"
-    WHERE "name" ILIKE $$1 OR "alias" ILIKE $$1
-    LIMIT $$2 OFFSET $$3;
+    (SELECT "id", "name", "alias" FROM "${tableName}" 
+    LEFT JOIN LATERAL unnest("${tableName}"."aliases") AS "alias" ON true) AS "flat"
+    WHERE "name" ILIKE $$1 OR "alias" ILIKE $$1;
     `, {
-      bind: [ `%${searchTerm}%`, limit, offset ],
+      bind: [ `%${searchTerm}%` ],
       type: sequelize.QueryTypes.SELECT
     });
 
     let elements = await sequelize.query(`
     SELECT DISTINCT "id", "name", "flat"."alias" FROM 
-    (SELECT "id", "name", unnest("aliases") AS "alias" FROM "${tableName}") AS "flat"
+    (SELECT "id", "name", "alias" FROM "${tableName}" 
+    LEFT JOIN LATERAL unnest("${tableName}"."aliases") AS "alias" ON true) AS "flat"
     WHERE "name" ILIKE $$1 OR "alias" ILIKE $$1
     LIMIT $$2 OFFSET $$3;
     `, {
