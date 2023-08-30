@@ -1,5 +1,5 @@
 const { User } = require("../models");
-const { compare } = require('../helpers/encrypt');
+const { encrypt, compare } = require('../helpers/encrypt');
 const { signToken } = require('../helpers/jwt');
 const {OAuth2Client, auth} = require('google-auth-library');
 const client = new OAuth2Client();
@@ -54,13 +54,11 @@ class Controller {
         defaults: {
           username: payload.name,
           email: payload.email,
-          role: "User",
           password: encrypt("google-login")
         },
         hooks: false
       })
       const { id, username, role } = user;
-      if (role !== 'User') throw {name: 'InvalidLogin', message: `Invalid user/password`};
       const accessToken = signToken({id, username, role}, '7d');
       res.status(200).json({
         access_token: accessToken
