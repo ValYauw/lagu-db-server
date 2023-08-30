@@ -44,7 +44,8 @@ router.get('/search/albums', SearchController.searchAlbums);
 router.get('/search/artists', SearchController.searchArtists);
 
 // API
-router.get('/youtube/artists', ExtLibraryController.getArtistYouTubeData);
+router.post('/youtube/artists', ExtLibraryController.getArtistYouTubeData);
+router.post('/vocadb/artists', ExtLibraryController.getPopularSongsFromVocaDB);
 
 router.use(authentication);
 

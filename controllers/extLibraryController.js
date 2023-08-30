@@ -68,6 +68,27 @@ class Controller {
     }
   }
 
+  static async getPopularSongsFromVocaDB(req, res, next) {
+    try {
+      const { vocadbUrl } = req.body;
+      const match = /^https?:\/\/vocadb\.net\/Ar\/([0-9]+)/.exec(vocadbUrl);
+      if (!match) throw { name: 'BadCredentials' };
+      const artistId = match[1];
+      const { data } = await axios.get(
+        `https://vocadb.net/api/artists/${artistId}?relations=PopularSongs&lang=Default`
+      );
+      let popularSongs = data.relations.popularSongs;
+      popularSongs = popularSongs.map(entry => {
+        const { defaultName, additionalNames, artistString, mainPicture, ratingScore } = entry;
+        const { urlThumb: imgUrl } = mainPicture;
+        return { name: defaultName, aliases: additionalNames, artistString, ratingScore };
+      })
+      res.status(200).json(popularSongs);
+    } catch(err) {
+      next(err);
+    }
+  }
+
 }
 
 module.exports = Controller;
