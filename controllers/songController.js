@@ -4,6 +4,7 @@ const {
   SongGenre, SongArtist, AlbumSong,
   PlayLink, ArtistLink, TimedLyrics, sequelize
 } = require("../models");
+const parser = require('subtitles-parser-vtt');
 
 class SongController {
 
@@ -55,7 +56,7 @@ class SongController {
     try {
       const {id} = req.params;
       if (isNaN(id)) throw {name: 'NotFoundError'};
-      const song = await Song.findOne({
+      let song = await Song.findOne({
         attributes: {
           exclude: ['createdAt', 'updatedAt']
         },
@@ -94,6 +95,20 @@ class SongController {
         ]
       });
       if (!song) throw {name: 'NotFoundError'};
+
+      song = JSON.parse(JSON.stringify(song));
+      // song.TimedLyrics = song.TimedLyrics.map(el => {
+      //   const { id, timedLyrics } = el;
+      //   const arr = parser.fromVtt(timedLyrics, 'ms');
+      //   return {id, parsedSrt: arr};
+      // });
+      if (song.TimedLyric) {
+        song.TimedLyric = {
+          id: song.TimedLyric.id,
+          parsedSrt: parser.fromVtt(song.TimedLyric.timedLyrics, 'ms')
+        }
+      }
+
       res.status(200).json(song);
     } catch (err) {
       next(err)

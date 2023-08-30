@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       Song.hasMany(models.PlayLink, {
         onDelete: 'CASCADE'
       });
-      Song.hasMany(models.TimedLyrics, {
+      Song.hasOne(models.TimedLyrics, {
         onDelete: 'CASCADE'
       })
       Song.belongsToMany(models.Artist, 
