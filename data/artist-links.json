@@ -43,7 +43,7 @@
   },
   {
     "id": 8,
-    "webURL": "https://www.youtube.com/user/ooo0eve0ooo",
+    "webURL": "https://www.youtube.com/channel/UCUXfRsEIJ9xO1DT7TbEWksw",
     "description": "YouTube Channel",
     "ArtistId": 3
   },
@@ -52,5 +52,11 @@
     "webURL": "https://www.nicovideo.jp/user/10103681",
     "description": "Niconico Channel",
     "ArtistId": 3
+  },
+  {
+    "id": 10,
+    "webURL": "https://vocadb.net/Ar/53",
+    "description": "VOCALOID Database",
+    "ArtistId": 2
   }
  ]
