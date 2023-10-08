@@ -13,24 +13,30 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Song.hasMany(Song, {
         foreignKey: 'parentId',
-        as: 'Children',
+        as: 'derivatives',
         onDelete: 'SET NULL'
       });
       Song.hasMany(models.PlayLink, {
+        as: 'links',
         onDelete: 'CASCADE'
       });
       Song.hasOne(models.TimedLyrics, {
+        foreignKey: 'SongId',
+        as: 'timedLyrics',
         onDelete: 'CASCADE'
-      })
-      Song.belongsToMany(models.Artist, 
-        { through: models.SongArtist }
-      );
-      Song.belongsToMany(models.Album, 
-        { through: models.AlbumSong }
-      );
-      Song.belongsToMany(models.Genre, 
-        { through: models.SongGenre }
-      );
+      });
+      Song.belongsToMany(models.Artist, { 
+        as: 'artists',
+        through: models.SongArtist 
+      });
+      Song.belongsToMany(models.Album, { 
+        as: 'albums',
+        through: models.AlbumSong 
+      });
+      Song.belongsToMany(models.Genre, { 
+        as: 'genres',
+        through: models.SongGenre 
+      });
     }
   }
   Song.init({

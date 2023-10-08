@@ -13,12 +13,13 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Genre.hasMany(Genre, {
         foreignKey: 'parentId',
-        as: 'Sub-genres',
+        as: 'subGenres',
         onDelete: 'SET NULL'
       });
-      Genre.belongsToMany(models.Song, 
-        { through: models.SongGenre }
-      );
+      Genre.belongsToMany(models.Song, { 
+        through: models.SongGenre,
+        as: 'song'
+      });
     }
   }
   Genre.init({

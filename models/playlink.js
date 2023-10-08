@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       PlayLink.belongsTo(models.Song, {
+        as: 'song',
         onDelete: 'CASCADE'
       });
     }

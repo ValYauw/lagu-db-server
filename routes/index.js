@@ -54,31 +54,20 @@ router.use(authentication);
  */
 // router.post('/genres', authorizeStaff, GenreController.addGenre);
 router.post('/songs', authorizeStaff, SongController.addSong);
-router.post('/songs/:id/genres/:genreId', authorizeStaff, SongController.addSongGenre);
-router.post('/songs/:id/playlinks', authorizeStaff, SongController.addPlayLink);
-router.post('/songs/:id/artists/:artistId', authorizeStaff, SongController.addSongArtist);
 router.post('/artists', authorizeStaff, ArtistController.addArtist);
-router.post('/artists/:id/links', authorizeStaff, ArtistController.addArtistLink);
 
 /* 
  * PUT & PATCH METHODS
  */
 // router.put('/genres/:id', GenreController.editGenre);
 router.put('/songs/:id', authorizeStaff, SongController.editSong);
-router.put('/songs/:id/playlinks/:playLinkId', authorizeStaff, SongController.editPlayLinkStatus);
-router.put('/songs/:id/artists/:artistId', authorizeStaff, SongController.editSongArtistRole);
 router.put('/artists/:id', authorizeStaff, ArtistController.editArtist);
-// router.put('/artists/:id/links', authorizeStaff, ArtistController.editArtistLink);
 
 /* 
  * DELETE METHODS
  */
 // router.delete('/genres/:id', GenreController.deleteGenre);
 router.delete('/songs/:id', authorizeAdmin, SongController.deleteSong);
-router.delete('/songs/:id/genres/:genreId', authorizeAdmin, SongController.deleteSongGenre);
-router.delete('/songs/:id/playlinks/:playLinkId', authorizeAdmin, SongController.deletePlayLink);
-router.delete('/songs/:id/artists/:artistId', authorizeAdmin, SongController.deleteSongArtist);
 router.delete('/artists/:id', authorizeAdmin, ArtistController.deleteArtist);
-router.delete('/artists/:id/links/:linkId', authorizeAdmin, ArtistController.deleteArtistLink);
 
 module.exports = router;

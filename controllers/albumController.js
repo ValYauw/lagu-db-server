@@ -88,11 +88,13 @@ class AlbumController {
         where: {id: +id},
         include: {
           model: Song,
+          as: 'trackList',
           attributes: {
             exclude: ['createdAt', 'updatedAt']
           },
           include: {
             model: Artist,
+            as: 'artists',
             attributes: ['name', 'aliases'],
             through: {
               attributes: ['role']
@@ -103,17 +105,17 @@ class AlbumController {
           }
         },
         order: [
-          [Song, AlbumSong, 'discNumber', 'ASC'],
-          [Song, AlbumSong, 'trackNumber', 'ASC']
+          ['trackList', AlbumSong, 'discNumber', 'ASC'],
+          ['trackList', AlbumSong, 'trackNumber', 'ASC']
         ]
       });
       if (!album) throw { name: 'NotFoundError' };
 
-      for (let song of album.Songs) {
+      for (let song of album.trackList) {
         song.dataValues.discNumber = song.AlbumSong.discNumber;
         song.dataValues.trackNumber = song.AlbumSong.trackNumber;
         delete song.dataValues.AlbumSong;
-        for (let artist of song.Artists) {
+        for (let artist of song.artists) {
           artist.dataValues.role = artist.SongArtist.role;
           delete artist.dataValues.SongArtist;
         }

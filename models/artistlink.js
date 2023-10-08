@@ -12,6 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       ArtistLink.belongsTo(models.Artist, {
+        as: 'artist',
+        foreignKey: 'ArtistId',
         onDelete: 'CASCADE'
       });
     }

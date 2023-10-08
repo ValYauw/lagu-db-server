@@ -2,5 +2,4 @@ node_modules/
 .env
 data/Seed Data.xlsx
 
-songs.test.js
-api-documentation.md
+__tests__/

@@ -12,11 +12,13 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Artist.hasMany(models.ArtistLink, {
+        as: 'links',
         onDelete: 'CASCADE'
       });
-      Artist.belongsToMany(models.Song, 
-        { through: models.SongArtist }
-      );
+      Artist.belongsToMany(models.Song, { 
+        through: models.SongArtist,
+        as: 'songs'
+      });
     }
   }
   Artist.init({

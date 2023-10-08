@@ -13,7 +13,7 @@ class GenreController {
       const genres = await Genre.findAll({
         order: [
           ['name', 'ASC'],
-          ['Sub-genres', 'name', 'ASC']
+          ['subGenres', 'name', 'ASC']
         ],
         attributes: {
           exclude: ['createdAt', 'updatedAt', 'parentId']
@@ -23,7 +23,7 @@ class GenreController {
           attributes: {
             exclude: ['createdAt', 'updatedAt', 'parentId']
           },
-          as: 'Sub-genres'
+          as: 'subGenres'
         },
         where: {parentId: null}
       });
@@ -55,15 +55,18 @@ class GenreController {
         include: [
           {
             model: Artist,
+            as: 'artists',
             attributes: ['id', 'name'],
             through: {attributes: []}
           },
           {
             model: PlayLink,
+            as: 'links',
             attributes: ['id', 'songURL', 'isInactive']
           },
           {
             model: Genre,
+            as: 'genres',
             attributes: [],
             through: {attributes: []},
             where: { id: +id }
@@ -87,14 +90,14 @@ class GenreController {
         attributes: {
           exclude: ['createdAt', 'updatedAt', 'parentId']
         },
-        order: [['Sub-genres', 'name', 'ASC']],
+        order: [['subGenres', 'name', 'ASC']],
         where: {id: +id},
         include: {
           model: Genre,
           attributes: {
             exclude: ['createdAt', 'updatedAt', 'parentId']
           },
-          as: 'Sub-genres'
+          as: 'subGenres'
         }
       });
       if (!genre) throw {name: 'NotFoundError'};
