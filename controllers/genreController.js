@@ -106,16 +106,54 @@ class GenreController {
       next(err);
     }
   }
-
-  // static async addGenre(req, res, next) {
-
-  // }
-  // static async editGenre(req, res, next) {
-
-  // }
-  // static async deleteGenre(req, res, next) {
-
-  // }
+  static async addGenre(req, res, next) {
+    try {
+      const { name, parentId } = req.body;
+      if (!parentId) parentId = null;
+      const genre = await Genre.create({
+        name, parentId
+      });
+      res.status(200).json(genre);
+    } catch(err) {
+      next(err);
+    }
+  }
+  static async editGenre(req, res, next) {
+    try {
+      const { id } = req.params;
+      if (!id || isNaN(id)) throw { name: 'NotFoundError' };
+      const genre = await Genre.findByPk(id);
+      if (!genre) throw { name: 'NotFoundError' };
+      const { name, parentId } = req.body;
+      if (!parentId) parentId = null;
+      await Genre.update({
+        name, parentId
+      }, {
+        where: {id: +id}
+      })
+      res.status(200).json({
+        message: 'Successfully edited genre'
+      });
+    } catch(err) {
+      next(err);
+    }
+  }
+  static async deleteGenre(req, res, next) {
+    try {
+      const { id } = req.params;
+      if (!id || isNaN(id)) throw { name: 'NotFoundError' };
+      const genre = await Genre.findByPk(id);
+      if (!genre) throw { name: 'NotFoundError' };
+      await Genre.destroy({
+        where: {id: +id}
+      });
+      res.status(200).json({
+        message: 'Successfully deleted genre'
+      });
+    } catch(err) {
+      next(err);
+    }
+  }
 
 }
 

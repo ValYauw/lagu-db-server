@@ -4,6 +4,7 @@ const {
   SongGenre, SongArtist, AlbumSong,
   PlayLink, ArtistLink, sequelize
 } = require("../models");
+const updateSubResources = require('../helpers/updateSubResources');
 const {Op} = require('sequelize');
 
 class ArtistController {
@@ -38,7 +39,6 @@ class ArtistController {
       next(err)
     }
   }
-
   static async getArtistById(req, res, next) {
     try {
       const { id } = req.params;
@@ -62,7 +62,6 @@ class ArtistController {
       next(err)
     }
   }
-
   static async getArtistSongs(req, res, next) {
     try {
       const { id } = req.params;
@@ -117,7 +116,6 @@ class ArtistController {
       next(err)
     }
   }
-
   static async getArtistAlbums(req, res, next) {
     try {
       const { id } = req.params;
@@ -170,7 +168,6 @@ class ArtistController {
       next(err);
     }
   }
-
   static async addArtist(req, res, next) {
     const t = await sequelize.transaction();
     try {
@@ -206,19 +203,43 @@ class ArtistController {
     }
   }
   static async editArtist(req, res, next) {
+    const t = await sequelize.transaction();
     try {
+      
       const { id } = req.params;
-      let { name, aliases, imageURL, description } = req.body;
-      if (!aliases?.length) aliases = null;      
-      let [numUpdated, song] = await Artist.update(
-        {name, aliases, imageURL, description}, 
-        {where: {id: +id}}
+      if (!id || isNaN(id)) throw { name: 'NotFoundError' };
+      let artist = await Artist.findByPk(id, {attributes: ['id']});
+      if (!artist) throw { name: 'NotFoundError' };
+
+      let { name, aliases, imageURL, description, artistLinks } = req.body;
+      if (!aliases?.length) aliases = null; 
+      artistLinks = artistLinks || [];
+
+      // Main Entity
+      await Artist.update(
+        { name, aliases, imageURL, description }, 
+        {
+          where: {id: +id},
+          transaction: t
+        }
       );
-      if (numUpdated === 0) throw { name: 'NotFoundError' };
+
+      // Nested resource: Artists
+      await updateSubResources({
+        model: ArtistLink,
+        foreignKey: 'ArtistId', 
+        mainResourceId: artist.id, 
+        resources: artistLinks, 
+        transaction: t
+      });
+
+      await t.commit();
       res.status(200).json({
         message: 'Edited song data'
       });
+
     } catch(err) {
+      await t.rollback();
       next(err);
     }
   }

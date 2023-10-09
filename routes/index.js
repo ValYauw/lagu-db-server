@@ -52,21 +52,22 @@ router.use(authentication);
 /* 
  * POST METHODS
  */
-// router.post('/genres', authorizeStaff, GenreController.addGenre);
+router.post('/genres', authorizeStaff, GenreController.addGenre);
 router.post('/songs', authorizeStaff, SongController.addSong);
 router.post('/artists', authorizeStaff, ArtistController.addArtist);
 
 /* 
  * PUT & PATCH METHODS
  */
-// router.put('/genres/:id', GenreController.editGenre);
+router.put('/genres/:id', GenreController.editGenre);
 router.put('/songs/:id', authorizeStaff, SongController.editSong);
+router.put('/songs/:id/genres', authorizeStaff, SongController.createOrUpdateSongGenres);
 router.put('/artists/:id', authorizeStaff, ArtistController.editArtist);
 
 /* 
  * DELETE METHODS
  */
-// router.delete('/genres/:id', GenreController.deleteGenre);
+router.delete('/genres/:id', GenreController.deleteGenre);
 router.delete('/songs/:id', authorizeAdmin, SongController.deleteSong);
 router.delete('/artists/:id', authorizeAdmin, ArtistController.deleteArtist);
 
