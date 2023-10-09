@@ -13,7 +13,6 @@ module.exports = (sequelize, DataTypes) => {
       });
       Song.hasMany(models.PlayLink, {
         as: 'links',
-        foreignKey: 'PlayLinkId',
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE'
       });

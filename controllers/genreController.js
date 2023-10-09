@@ -48,7 +48,11 @@ class GenreController {
       const genre = await Genre.findOne({where: {id: +id}});
       if (!genre) throw { name: 'NotFoundError' };
       const { count, rows: songs } = await Song.findAndCountAll({
-        order: [['name', 'ASC']],
+        order: [
+          ['name', 'ASC'],
+          ['id', 'ASC'],
+          ['genres', 'name']
+        ],
         attributes: {
           exclude: ['createdAt', 'updatedAt', 'parentId']
         },
@@ -72,7 +76,8 @@ class GenreController {
             where: { id: +id }
           }
         ],
-        distinct: true
+        distinct: true,
+        limit, offset
       });
       res.status(200).json({
         count, offset, data: songs
