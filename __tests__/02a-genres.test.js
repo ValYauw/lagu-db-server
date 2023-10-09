@@ -507,4 +507,18 @@ describe('DELETE genre', () => {
     expect(response.statusCode).toBe(401);
   });
 
+  it('should fail to delete a genre with an invalid id', async () => {
+    const response = await request(app)
+      .delete(entrypoints.genres + '/nan')
+      .set('access_token', admin_access_token);
+    expect(response.statusCode).toBe(404);
+  });
+
+  it('should fail to delete a genre with a non-existent id', async () => {
+    const response = await request(app)
+      .delete(entrypoints.genres + '/100')
+      .set('access_token', admin_access_token);
+    expect(response.statusCode).toBe(404);
+  });
+
 });

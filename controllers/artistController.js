@@ -212,9 +212,10 @@ class ArtistController {
       let artist = await Artist.findByPk(id, {attributes: ['id']});
       if (!artist) throw { name: 'NotFoundError' };
 
-      let { name, aliases, imageURL, description, artistLinks } = req.body;
+      let { name, aliases, imageURL, description, links } = req.body;
+      name = name || '';
       if (!aliases?.length) aliases = null; 
-      artistLinks = artistLinks || [];
+      links = links || [];
 
       // Main Entity
       await Artist.update(
@@ -230,7 +231,7 @@ class ArtistController {
         model: ArtistLink,
         foreignKey: 'ArtistId', 
         mainResourceId: artist.id, 
-        resources: artistLinks, 
+        resources: links, 
         transaction: t
       });
 
@@ -247,6 +248,7 @@ class ArtistController {
   static async deleteArtist(req, res, next) {
     try {
       const { id } = req.params;
+      if (!id || isNaN(id)) throw { name: 'NotFoundError' };
       let artist = await Artist.findOne({where: {id: +id}});
       if (!artist) throw { name: 'NotFoundError' };
       await Artist.destroy({
