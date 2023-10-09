@@ -135,8 +135,6 @@ beforeAll(async () => {
     });
   user_access_token = response.body.access_token;
 
-  console.log('access_tokens', admin_access_token, staff_access_token, user_access_token);
-
 });
 
 afterAll(async () => {

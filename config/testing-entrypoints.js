@@ -3,7 +3,9 @@ const entryPoints = {
   register: '/register',
   genres: '/genres',
   songs: '/songs',
-  artists: '/artists'
+  artists: '/artists',
+  searchSongs: '/search/songs',
+  searchArtists: '/search/artists'
 }
 
 module.exports = entryPoints;

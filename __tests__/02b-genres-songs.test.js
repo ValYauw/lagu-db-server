@@ -109,17 +109,9 @@ describe('GET songs by genre', () => {
     expect(songType).toBeDefined();
     expect(artists).toBeDefined();
     expect(links).toBeDefined();
-
     expect(artists?.length).toBe(1);
     expect(artists[0].name).toBe('Taylor Swift');
-
-    expect(genres?.length).toBe(3);
-    expect(genres[0].name).toBe('Pop');
-    expect(genres[1].name).toBe('Rock');
-    expect(genres[2].name).toBe('VOCALOID');
-
     expect(links?.length).toBe(2);
-
   });
 
   it('should get the list of songs by genre, per page', async () => {

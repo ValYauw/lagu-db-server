@@ -25,6 +25,7 @@ class SearchController {
     (SELECT "id", "name", "alias" FROM "${tableName}" 
     LEFT JOIN LATERAL unnest("${tableName}"."aliases") AS "alias" ON true) AS "flat"
     WHERE "name" ILIKE $$1 OR "alias" ILIKE $$1
+    ORDER BY "id" ASC
     LIMIT $$2 OFFSET $$3;
     `, {
       bind: [ `%${searchTerm}%`, limit, offset ],
@@ -48,10 +49,13 @@ class SearchController {
 
   static async searchSongs(req, res, next) {
     try {
-      let { limit, offset } = req;
-      let { title } = req.query;
+      let { limit, offset, title } = req.query;
       const [count, songs] = await SearchController.query("Songs", title, limit, offset);
-      res.status(200).json({ count, offset, data: songs });
+      res.status(200).json({ 
+        count, 
+        offset: +offset || 0, 
+        data: songs 
+      });
     } catch(err) {
       next(err);
     }
@@ -70,10 +74,13 @@ class SearchController {
 
   static async searchArtists(req, res, next) {
     try {
-      let { limit, offset } = req;
-      let { title } = req.query;
+      let { limit, offset, title } = req.query;
       const [count, artists] = await SearchController.query("Artists", title, limit, offset);
-      res.status(200).json({ count, offset, data: artists });
+      res.status(200).json({  
+        count, 
+        offset: +offset || 0, 
+        data: artists
+      });
     } catch(err) {
       next(err);
     }

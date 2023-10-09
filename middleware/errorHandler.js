@@ -40,6 +40,11 @@ function errorHandler(err, req, res, next) {
       statusCode = 400;
       message = err?.errors[0]?.message || 'Internal Server Error';
       break;
+    
+    case "AggregateError":
+      statusCode = 400;
+      message = err?.errors[0]?.errors?.errors[0]?.message;
+      break;
 
     case "NotFoundError":
       statusCode = 404;

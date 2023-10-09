@@ -40,8 +40,8 @@ router.get('/artists/:id', ArtistController.getArtistById);
 // router.get('/albums/:id', AlbumController.getAlbumById);
 // Search
 router.get('/search/songs', SearchController.searchSongs);
-// router.get('/search/albums', SearchController.searchAlbums);
 router.get('/search/artists', SearchController.searchArtists);
+// router.get('/search/albums', SearchController.searchAlbums);
 
 // API
 router.post('/youtube/artists', ExtLibraryController.getArtistYouTubeData);

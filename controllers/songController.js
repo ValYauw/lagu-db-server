@@ -150,15 +150,9 @@ class SongController {
       }
       await t.commit();
 
-      // Get created Song resource
-      song = await Song.findOne({
-        where: {id: song.id}, 
-        include: [
-          { model: Artist, through: { attributes: [] } }, 
-          { model: PlayLink }
-        ]
+      res.status(201).json({
+        message: 'Successfully created song'
       });
-      res.status(201).json(song);
       
     } catch(err) {
       await t.rollback();
@@ -208,7 +202,7 @@ class SongController {
 
       await t.commit();
       res.status(200).json({
-        message: 'Edited song data'
+        message: 'Successfully edited song'
       });
 
     } catch(err) {
@@ -226,7 +220,7 @@ class SongController {
         where: {id: +id}
       });
       res.status(200).json({
-        message: "Successfully deleted"
+        message: "Successfully deleted song"
       });
     } catch(err) {
       next(err);
@@ -251,7 +245,7 @@ class SongController {
 
       await t.commit();
       res.status(200).json({
-        message: 'Edited song data'
+        message: 'Successfully edited song'
       });
     } catch (err) {
       await t.rollback();

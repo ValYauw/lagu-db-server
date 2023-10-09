@@ -19,7 +19,7 @@ class ArtistController {
       if (limit > 100) limit = 100;
 
       const artists = await Artist.findAndCountAll({
-        order: [['name', 'ASC']],
+        order: [['createdAt', 'DESC'], ['name', 'ASC']],
         attributes: {
           exclude: ['createdAt', 'updatedAt'],
           include: [
@@ -171,31 +171,32 @@ class ArtistController {
   static async addArtist(req, res, next) {
     const t = await sequelize.transaction();
     try {
-      let { name, aliases, imageURL, description, artistLinks } = req.body;
+      let { name, aliases, imageURL, description, links } = req.body;
 
       // Main Entity
       if (!aliases?.length) aliases = null;
+      if (!imageURL) imageURL = null;
       let artist = await Artist.create(
         { name, aliases, imageURL, description },
         { transaction: t }
       );
 
       // Artist Link Nested Resource
-      if (artistLinks && artistLinks?.length) {
-        const addArtistLinks = artistLinks.map(artistLink => {
-          const { webURL, description, isInactive } = artistLink;
+      if (links && links?.length) {
+        const addArtistLinks = links.map(link => {
+          const { webURL, description, isInactive } = link;
           return { webURL, description, isInactive, ArtistId: artist.id };
         })
-        await ArtistLink.bulkCreate(addArtistLinks, { transaction: t });
+        await ArtistLink.bulkCreate(addArtistLinks, { 
+          transaction: t,
+          validate: true
+        });
       }
       await t.commit();
 
-      // Get created resource
-      artist = await Artist.findOne({
-        where: {id: artist.id},
-        include: { model: ArtistLink }
+      res.status(201).json({
+        message: 'Successfully created artist'
       });
-      res.status(201).json(artist);
 
     } catch(err) {
       await t.rollback();
@@ -235,7 +236,7 @@ class ArtistController {
 
       await t.commit();
       res.status(200).json({
-        message: 'Edited song data'
+        message: 'Successfully edited artist'
       });
 
     } catch(err) {
@@ -252,43 +253,12 @@ class ArtistController {
         where: {id: +id}
       });
       res.status(200).json({
-        message: "Successfully deleted"
+        message: "Successfully deleted artist"
       })
     } catch(err) {
       next(err);
     }
   }
-
-  // static async addArtistLink(req, res, next) {
-  //   try {
-  //     const { id: ArtistId } = req.params;
-  //     const { webURL, description, isInactive } = req.body;
-  //     const artist = await Artist.findByPk(+ArtistId);
-  //     if (!artist) throw { name: 'NotFoundError' }
-  //     await ArtistLink.create({ webURL, description, isInactive, ArtistId });
-  //     res.status(201).json({
-  //       message: 'Added new artist link'
-  //     })
-  //   } catch(err) {
-  //     next(err);
-  //   }
-  // }
-  // // static async editArtistLink(req, res, next) {
-
-  // // }
-  // static async deleteArtistLink(req, res, next) {
-  //   try {
-  //     const { id, linkId } = req.params;
-  //     const artistLink = await ArtistLink.findOne({where: {id: +linkId}});
-  //     if (!artistLink || artistLink.ArtistId !== +id) throw { name: 'NotFoundError' };
-  //     await ArtistLink.destroy({where: {id: +linkId}});
-  //     res.status(200).json({
-  //       message: 'Removed artist link'
-  //     })
-  //   } catch(err) {
-  //     next(err);
-  //   }
-  // }
 
 }
 
