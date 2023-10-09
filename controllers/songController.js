@@ -1,7 +1,7 @@
 const { 
   User,
-  Genre, Song, Artist, Album,
-  SongGenre, SongArtist, AlbumSong,
+  Genre, Song, Artist,
+  SongGenre, SongArtist,
   PlayLink, ArtistLink, TimedLyrics, sequelize
 } = require("../models");
 const updateSubResources = require('../helpers/updateSubResources');
@@ -79,12 +79,12 @@ class SongController {
             attributes: ['id', 'name', 'aliases'],
             through: {attributes: []}
           },
-          {
-            model: Album,
-            as: 'albums',
-            attributes: ['id', 'name', 'aliases', 'releaseDate'],
-            through: {attributes: []}
-          },
+          // {
+          //   model: Album,
+          //   as: 'albums',
+          //   attributes: ['id', 'name', 'aliases', 'releaseDate'],
+          //   through: {attributes: []}
+          // },
           {
             model: PlayLink,
             as: 'links',

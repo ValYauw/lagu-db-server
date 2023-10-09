@@ -1,7 +1,7 @@
 const { 
   User,
-  Genre, Song, Artist, Album,
-  SongGenre, SongArtist, AlbumSong,
+  Genre, Song, Artist,
+  SongGenre, SongArtist,
   PlayLink, ArtistLink, sequelize
 } = require("../models");
 const updateSubResources = require('../helpers/updateSubResources');
@@ -116,58 +116,58 @@ class ArtistController {
       next(err)
     }
   }
-  static async getArtistAlbums(req, res, next) {
-    try {
-      const { id } = req.params;
-      if (isNaN(id)) throw {name: 'NotFoundError'};
+  // static async getArtistAlbums(req, res, next) {
+  //   try {
+  //     const { id } = req.params;
+  //     if (isNaN(id)) throw {name: 'NotFoundError'};
 
-      let { limit, offset } = req.query;
-      offset = +offset || 0;
-      limit = limit || 20;
-      if (isNaN(limit) || isNaN(offset)) throw {name: 'BadCredentials'};
-      if (limit > 100) limit = 100;
+  //     let { limit, offset } = req.query;
+  //     offset = +offset || 0;
+  //     limit = limit || 20;
+  //     if (isNaN(limit) || isNaN(offset)) throw {name: 'BadCredentials'};
+  //     if (limit > 100) limit = 100;
 
-      const artist = await Artist.findOne({where: { id: +id }});
-      if (!artist) throw {name: 'NotFoundError'};
+  //     const artist = await Artist.findOne({where: { id: +id }});
+  //     if (!artist) throw {name: 'NotFoundError'};
 
-      let [[{count}], albums] = await Promise.all([
-        sequelize.query(`
-          SELECT COUNT(DISTINCT("Album.id"))::INTEGER AS "count"
-          FROM "ConsolidatedArtistAlbumSongs"
-          WHERE "Artist.id" = $$1`, 
-          {
-            bind: [id],
-            type: sequelize.QueryTypes.SELECT
-            // logging: () => {console.log('Querying albums');}
-          }),
-        sequelize.query(`
-          SELECT DISTINCT
-            "Album.id" AS "id", 
-            "Album.name" AS "name", 
-            "Album.aliases" AS "aliases", 
-            "Album.imageURL" AS "imageURL", 
-            "Album.releaseDate" AS "releaseDate", 
-            "Album.description" AS "description"
-          FROM "ConsolidatedArtistAlbumSongs"
-          WHERE "Artist.id" = $$1
-          ORDER BY "name" ASC
-          LIMIT $$2 OFFSET $$3;
-          `, 
-          {
-            bind: [id, limit, offset],
-            type: sequelize.QueryTypes.SELECT
-            // logging: () => {console.log('Querying albums');}
-          })
-      ]);
+  //     let [[{count}], albums] = await Promise.all([
+  //       sequelize.query(`
+  //         SELECT COUNT(DISTINCT("Album.id"))::INTEGER AS "count"
+  //         FROM "ConsolidatedArtistAlbumSongs"
+  //         WHERE "Artist.id" = $$1`, 
+  //         {
+  //           bind: [id],
+  //           type: sequelize.QueryTypes.SELECT
+  //           // logging: () => {console.log('Querying albums');}
+  //         }),
+  //       sequelize.query(`
+  //         SELECT DISTINCT
+  //           "Album.id" AS "id", 
+  //           "Album.name" AS "name", 
+  //           "Album.aliases" AS "aliases", 
+  //           "Album.imageURL" AS "imageURL", 
+  //           "Album.releaseDate" AS "releaseDate", 
+  //           "Album.description" AS "description"
+  //         FROM "ConsolidatedArtistAlbumSongs"
+  //         WHERE "Artist.id" = $$1
+  //         ORDER BY "name" ASC
+  //         LIMIT $$2 OFFSET $$3;
+  //         `, 
+  //         {
+  //           bind: [id, limit, offset],
+  //           type: sequelize.QueryTypes.SELECT
+  //           // logging: () => {console.log('Querying albums');}
+  //         })
+  //     ]);
 
-      res.status(200).json({
-        count, offset, data: albums
-      });
+  //     res.status(200).json({
+  //       count, offset, data: albums
+  //     });
 
-    } catch(err) {
-      next(err);
-    }
-  }
+  //   } catch(err) {
+  //     next(err);
+  //   }
+  // }
   static async addArtist(req, res, next) {
     const t = await sequelize.transaction();
     try {

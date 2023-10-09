@@ -29,12 +29,12 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'SongId',
         otherKey: 'ArtistId'
       });
-      Song.belongsToMany(models.Album, { 
-        as: 'albums',
-        through: models.AlbumSong,
-        foreignKey: 'SongId',
-        otherKey: 'AlbumId'
-      });
+      // Song.belongsToMany(models.Album, { 
+      //   as: 'albums',
+      //   through: models.AlbumSong,
+      //   foreignKey: 'SongId',
+      //   otherKey: 'AlbumId'
+      // });
       Song.belongsToMany(models.Genre, { 
         as: 'genres',
         through: models.SongGenre,

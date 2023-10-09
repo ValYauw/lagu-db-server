@@ -1,7 +1,7 @@
 const { 
   User,
-  Genre, Song, Artist, Album,
-  SongGenre, SongArtist, AlbumSong,
+  Genre, Song, Artist,
+  SongGenre, SongArtist,
   PlayLink, ArtistLink, sequelize
 } = require("../models");
 const {Op} = require('sequelize');

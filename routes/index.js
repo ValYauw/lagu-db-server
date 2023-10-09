@@ -4,7 +4,7 @@ const LoginController = require('../controllers/loginController');
 const GenreController = require('../controllers/genreController');
 const SongController = require('../controllers/songController');
 const ArtistController = require('../controllers/artistController');
-const AlbumController = require('../controllers/albumController');
+// const AlbumController = require('../controllers/albumController');
 const SearchController = require('../controllers/searchController');
 const ExtLibraryController = require('../controllers/extLibraryController');
 
@@ -36,11 +36,11 @@ router.get('/artists/:id/songs', ArtistController.getArtistSongs);
 router.get('/artists/:id/albums', ArtistController.getArtistAlbums);
 router.get('/artists/:id', ArtistController.getArtistById);
 // Albums
-router.get('/albums', AlbumController.getAlbums);
-router.get('/albums/:id', AlbumController.getAlbumById);
+// router.get('/albums', AlbumController.getAlbums);
+// router.get('/albums/:id', AlbumController.getAlbumById);
 // Search
 router.get('/search/songs', SearchController.searchSongs);
-router.get('/search/albums', SearchController.searchAlbums);
+// router.get('/search/albums', SearchController.searchAlbums);
 router.get('/search/artists', SearchController.searchArtists);
 
 // API

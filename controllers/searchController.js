@@ -1,7 +1,7 @@
 const { 
   User,
-  Genre, Song, Artist, Album,
-  SongGenre, SongArtist, AlbumSong,
+  Genre, Song, Artist,
+  SongGenre, SongArtist,
   PlayLink, ArtistLink, sequelize
 } = require("../models");
 const {Op} = require('sequelize');
@@ -57,16 +57,16 @@ class SearchController {
     }
   }
 
-  static async searchAlbums(req, res, next) {
-    try {
-      let { limit, offset } = req;
-      let { title } = req.query;
-      const [count, albums] = await SearchController.query("Albums", title, limit, offset);
-      res.status(200).json({ count, offset, data: albums });
-    } catch(err) {
-      next(err);
-    }
-  }
+  // static async searchAlbums(req, res, next) {
+  //   try {
+  //     let { limit, offset } = req;
+  //     let { title } = req.query;
+  //     const [count, albums] = await SearchController.query("Albums", title, limit, offset);
+  //     res.status(200).json({ count, offset, data: albums });
+  //   } catch(err) {
+  //     next(err);
+  //   }
+  // }
 
   static async searchArtists(req, res, next) {
     try {
