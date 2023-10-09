@@ -4,14 +4,7 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class SongGenre extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-    }
+    static associate(models) { }
   }
   SongGenre.init({
     SongId: {
@@ -20,6 +13,8 @@ module.exports = (sequelize, DataTypes) => {
         model: 'Songs',
         key: 'id'
       },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
       allowNull: false
     },
     GenreId: {
@@ -28,6 +23,8 @@ module.exports = (sequelize, DataTypes) => {
         model: 'Genres',
         key: 'id'
       },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
       allowNull: false
     }
   }, {

@@ -6,15 +6,6 @@ const { encrypt } = require('../helpers/encrypt');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    /**
-     * Add seed commands here.
-     *
-     * Example:
-     * await queryInterface.bulkInsert('People', [{
-     *   name: 'John Doe',
-     *   isBetaMember: false
-     * }], {});
-    */
     const rawSeedData = JSON.parse(fs.readFileSync('./data/users.json'));
     const seedData = rawSeedData.map(el => {
       let { username, email, password, role } = el;
@@ -27,12 +18,10 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
-    await queryInterface.bulkDelete('Users', null, {});
+    await queryInterface.bulkDelete('Users', null, {
+      restartIdentity: true,
+      cascade: true,
+      truncate: true
+    });
   }
 };

@@ -5,15 +5,6 @@ const fs = require('fs');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    /**
-     * Add seed commands here.
-     *
-     * Example:
-     * await queryInterface.bulkInsert('People', [{
-     *   name: 'John Doe',
-     *   isBetaMember: false
-     * }], {});
-    */
     const rawSeedData = JSON.parse(fs.readFileSync('./data/album-song.json'));
     const seedData = rawSeedData.map(el => {
       let { AlbumId, SongId, discNumber, trackNumber } = el;
@@ -25,12 +16,10 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
-    await queryInterface.bulkDelete('AlbumSongs', null, {});
+    await queryInterface.bulkDelete('AlbumSongs', null, {
+      restartIdentity: true,
+      cascade: true,
+      truncate: true
+    });
   }
 };

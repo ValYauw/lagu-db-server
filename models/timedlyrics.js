@@ -4,14 +4,11 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class TimedLyrics extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
-      TimedLyrics.belongsTo(models.Song);
+      TimedLyrics.belongsTo(models.Song, {
+        as: 'song',
+        foreignKey: 'SongId'
+      });
     }
   }
   TimedLyrics.init({
@@ -21,7 +18,9 @@ module.exports = (sequelize, DataTypes) => {
       references: {
         model: 'Songs',
         key: 'id'
-      }
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
     },
     timedLyrics: {
       type: DataTypes.TEXT,

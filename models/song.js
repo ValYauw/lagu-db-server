@@ -4,38 +4,42 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Song extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
       Song.hasMany(Song, {
-        foreignKey: 'parentId',
         as: 'derivatives',
-        onDelete: 'SET NULL'
+        foreignKey: 'parentId',
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE'
       });
       Song.hasMany(models.PlayLink, {
         as: 'links',
-        onDelete: 'CASCADE'
+        foreignKey: 'PlayLinkId',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
       });
       Song.hasOne(models.TimedLyrics, {
-        foreignKey: 'SongId',
         as: 'timedLyrics',
-        onDelete: 'CASCADE'
+        foreignKey: 'SongId',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
       });
       Song.belongsToMany(models.Artist, { 
         as: 'artists',
-        through: models.SongArtist 
+        through: models.SongArtist,
+        foreignKey: 'SongId',
+        otherKey: 'ArtistId'
       });
       Song.belongsToMany(models.Album, { 
         as: 'albums',
-        through: models.AlbumSong 
+        through: models.AlbumSong,
+        foreignKey: 'SongId',
+        otherKey: 'AlbumId'
       });
       Song.belongsToMany(models.Genre, { 
         as: 'genres',
-        through: models.SongGenre 
+        through: models.SongGenre,
+        foreignKey: 'SongId',
+        otherKey: 'GenreId'
       });
     }
   }

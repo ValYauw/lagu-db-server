@@ -4,21 +4,18 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Genre extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
       Genre.hasMany(Genre, {
-        foreignKey: 'parentId',
         as: 'subGenres',
-        onDelete: 'SET NULL'
+        foreignKey: 'parentId',
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE'
       });
       Genre.belongsToMany(models.Song, { 
         through: models.SongGenre,
-        as: 'song'
+        as: 'song',
+        foreignKey: 'GenreId',
+        otherKey: 'SongId'
       });
     }
   }
