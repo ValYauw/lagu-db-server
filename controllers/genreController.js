@@ -25,7 +25,7 @@ class GenreController {
           },
           as: 'subGenres'
         },
-        where: {parentId: null}
+        where: { parentId: {[Op.is]: null} }
       });
       res.status(200).json(genres);
     } catch (err) {
@@ -92,13 +92,22 @@ class GenreController {
         },
         order: [['subGenres', 'name', 'ASC']],
         where: {id: +id},
-        include: {
-          model: Genre,
-          attributes: {
-            exclude: ['createdAt', 'updatedAt', 'parentId']
+        include: [
+          {
+            model: Genre,
+            attributes: {
+              exclude: ['createdAt', 'updatedAt', 'parentId']
+            },
+            as: 'subGenres'
           },
-          as: 'subGenres'
-        }
+          {
+            model: Genre,
+            attributes: {
+              exclude: ['createdAt', 'updatedAt', 'parentId']
+            },
+            as: 'parentGenre'
+          }
+        ]
       });
       if (!genre) throw {name: 'NotFoundError'};
       res.status(200).json(genre);
@@ -108,12 +117,12 @@ class GenreController {
   }
   static async addGenre(req, res, next) {
     try {
-      const { name, parentId } = req.body;
+      let { name, parentId } = req.body;
       if (!parentId) parentId = null;
       const genre = await Genre.create({
         name, parentId
       });
-      res.status(200).json(genre);
+      res.status(201).json(genre);
     } catch(err) {
       next(err);
     }
@@ -124,8 +133,9 @@ class GenreController {
       if (!id || isNaN(id)) throw { name: 'NotFoundError' };
       const genre = await Genre.findByPk(id);
       if (!genre) throw { name: 'NotFoundError' };
-      const { name, parentId } = req.body;
+      let { name, parentId } = req.body;
       if (!parentId) parentId = null;
+      if (!name) throw { name: 'BadCredentials', message: 'Genre name is required' };
       await Genre.update({
         name, parentId
       }, {

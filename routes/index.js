@@ -33,7 +33,7 @@ router.get('/songs/:id', SongController.getSongById);
 // Artists
 router.get('/artists', ArtistController.getArtists);
 router.get('/artists/:id/songs', ArtistController.getArtistSongs);
-router.get('/artists/:id/albums', ArtistController.getArtistAlbums);
+// router.get('/artists/:id/albums', ArtistController.getArtistAlbums);
 router.get('/artists/:id', ArtistController.getArtistById);
 // Albums
 // router.get('/albums', AlbumController.getAlbums);
@@ -59,7 +59,7 @@ router.post('/artists', authorizeStaff, ArtistController.addArtist);
 /* 
  * PUT & PATCH METHODS
  */
-router.put('/genres/:id', GenreController.editGenre);
+router.put('/genres/:id', authorizeAdmin, GenreController.editGenre);
 router.put('/songs/:id', authorizeStaff, SongController.editSong);
 router.put('/songs/:id/genres', authorizeStaff, SongController.createOrUpdateSongGenres);
 router.put('/artists/:id', authorizeStaff, ArtistController.editArtist);
@@ -67,7 +67,7 @@ router.put('/artists/:id', authorizeStaff, ArtistController.editArtist);
 /* 
  * DELETE METHODS
  */
-router.delete('/genres/:id', GenreController.deleteGenre);
+router.delete('/genres/:id', authorizeAdmin, GenreController.deleteGenre);
 router.delete('/songs/:id', authorizeAdmin, SongController.deleteSong);
 router.delete('/artists/:id', authorizeAdmin, ArtistController.deleteArtist);
 

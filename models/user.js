@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
   User.init({
     username: {
       type: DataTypes.STRING(50),
-      unique: {msg: 'Username must be unique'},
+      unique: {msg: 'Username is already registered'},
       allowNull: false,
       validate: {
         notEmpty: {msg: 'Username is required'},

@@ -11,6 +11,12 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'SET NULL',
         onUpdate: 'CASCADE'
       });
+      Genre.belongsTo(Genre, {
+        as: 'parentGenre',
+        foreignKey: 'parentId',
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE'
+      });
       Genre.belongsToMany(models.Song, { 
         through: models.SongGenre,
         as: 'song',
