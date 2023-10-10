@@ -735,6 +735,14 @@ describe('PUT artists', () => {
 
 describe('DELETE artists', () => {
 
+  it('should fail to delete a musical artist with a staff access token', async () => {
+    const response = await request(app)
+      .delete(entrypoints.artists + '/1')
+      .set('access_token', staff_access_token);
+    expect(response.statusCode).toBe(403);
+    expect(response.body.message).toBeDefined();
+  });
+
   it('should fail to delete a musical artist with a user access token', async () => {
     const response = await request(app)
       .delete(entrypoints.artists + '/1')

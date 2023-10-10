@@ -82,13 +82,13 @@ class SongController {
             model: Genre,
             as: 'genres',
             attributes: ['id', 'name'],
-            through: {attributes: []}
+            through: { attributes: [] }
           },
           {
             model: Artist,
             as: 'artists',
             attributes: ['id', 'name', 'aliases'],
-            through: {attributes: []}
+            through: { attributes: ['role'] }
           },
           // {
           //   model: Album,
@@ -116,6 +116,13 @@ class SongController {
       //   const arr = parser.fromVtt(timedLyrics, 'ms');
       //   return {id, parsedSrt: arr};
       // });
+      if (song.artists) {
+        song.artists = song.artists.map(el => {
+          const { id, name, aliases } = el;
+          const role = el.SongArtist.role;
+          return { id, name, aliases, role };
+        })
+      }
       if (song.timedLyrics) {
         song.timedLyrics = parser.fromVtt(song.timedLyrics.timedLyrics, 'ms');
       }
@@ -129,10 +136,12 @@ class SongController {
   static async addSong(req, res, next) {
     const t = await sequelize.transaction();
     try {
-      let { name, aliases, releaseDate, songType, parentId, artists, playLinks } = req.body;
+      let { name, aliases, releaseDate, songType, parentId, artists, links } = req.body;
 
       // Main entity
       if (!aliases?.length) aliases = null;
+      if (!releaseDate) releaseDate = null;
+      if (!songType) songType = 'Original';
       if (!parentId) parentId = null;
       let song = await Song.create(
         { name, aliases, releaseDate, songType, parentId }, 
@@ -145,16 +154,22 @@ class SongController {
           const { id: ArtistId, role } = artist;
           return { SongId: song.id, ArtistId, role };
         });
-        await SongArtist.bulkCreate(addArtists, { transaction: t });
+        await SongArtist.bulkCreate(addArtists, { 
+          validate: true,
+          transaction: t 
+        });
       }
 
       // PlayLink Nested Resource
-      if (playLinks && playLinks?.length) {
-        const addPlayLinks = playLinks.map(playLink => {
+      if (links && links?.length) {
+        const addPlayLinks = links.map(playLink => {
           const { songURL, isInactive } = playLink;
           return { songURL, isInactive, SongId: song.id }
         });
-        await PlayLink.bulkCreate(addPlayLinks, { transaction: t });
+        await PlayLink.bulkCreate(addPlayLinks, { 
+          validate: true,
+          transaction: t 
+        });
       }
       await t.commit();
 
@@ -175,11 +190,11 @@ class SongController {
       let song = await Song.findByPk(id, {attributes: ['id']});
       if (!song) throw { name: 'NotFoundError' };
 
-      let { name, aliases, releaseDate, songType, parentId, artists, playLinks } = req.body;
+      let { name, aliases, releaseDate, songType, parentId, artists, links } = req.body;
       if (!aliases?.length) aliases = null;
       if (!parentId) parentId = null;
       artists = artists || [];
-      playLinks = playLinks || [];
+      links = links || [];
 
       // Main Entity
       await Song.update(
@@ -204,7 +219,7 @@ class SongController {
         model: PlayLink,
         foreignKey: 'SongId', 
         mainResourceId: song.id, 
-        resources: playLinks, 
+        resources: links, 
         transaction: t
       });
 

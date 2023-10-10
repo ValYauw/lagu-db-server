@@ -422,7 +422,8 @@ describe('GET songs', () => {
     expect(artists).toEqual([{
       id: 3,
       name: 'Eve',
-      aliases: null
+      aliases: null,
+      role: 'composer, vocalist'
     }]);
     expect(links).toEqual([{
       id: 8,
@@ -473,12 +474,14 @@ describe('GET songs', () => {
       {
         id: 1,
         name: 'Hatsune Miku',
-        aliases: ['Miku Hatsune', 'CV-01']
+        aliases: ['Miku Hatsune', 'CV-01'],
+        role: 'vocalist'
       },
       {
         id: 2,
         name: 'Wowaka',
-        aliases: null
+        aliases: null,
+        role: 'composer'
       },
     ]);
     expect(links).toEqual([

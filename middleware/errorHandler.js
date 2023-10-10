@@ -41,6 +41,11 @@ function errorHandler(err, req, res, next) {
       message = err?.errors[0]?.message || 'Internal Server Error';
       break;
     
+    case "SequelizeForeignKeyConstraintError":
+      statusCode = 400;
+      message = 'Invalid Resource ID';
+      break;
+    
     case "AggregateError":
       statusCode = 400;
       message = err?.errors[0]?.errors?.errors[0]?.message;
