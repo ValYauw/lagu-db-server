@@ -136,7 +136,7 @@ describe('GET songs by genre', () => {
     expect(links).toBeDefined();
   });
 
-  it('should fail to get a genre with invalid id', async () => {
+  it('should fail to get songs for a genre with invalid id', async () => {
     const response = await request(app)
       .get(entrypoints.genres + '/nan/songs')
     expect(response.statusCode).toBe(404);
@@ -145,7 +145,7 @@ describe('GET songs by genre', () => {
     expect(message).toBe('Data not found');
   });
 
-  it('should fail to get a genre with non-existent id', async () => {
+  it('should fail to get songs for a genre with non-existent id', async () => {
     const response = await request(app)
       .get(entrypoints.genres + '/100/songs')
     expect(response.statusCode).toBe(404);

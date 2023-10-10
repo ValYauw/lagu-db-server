@@ -87,7 +87,10 @@ class ArtistController {
         attributes: {
           exclude: ['createdAt', 'updatedAt']
         },
-        order: [['name', 'ASC']],
+        order: [
+          ['name', 'ASC'], 
+          ['id', 'ASC']
+        ],
         where: {id: songIds.map(el => el.dataValues.SongId)},
         include: [
           {
