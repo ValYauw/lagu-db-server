@@ -1,13 +1,12 @@
 function errorHandler(err, req, res, next) {
   let statusCode = 500;
   let message = "Internal Server Error";
-  let errors = null;
 
   switch (err.name) {
 
     case "BadCredentials":
       statusCode = 400;
-      message = "Bad Credentials";
+      message = err.message || "Bad Credentials";
       break;
     case "NotSuccessful":
       statusCode = 500;
@@ -39,8 +38,17 @@ function errorHandler(err, req, res, next) {
     case "SequelizeValidationError":
     case "SequelizeUniqueConstraintError":
       statusCode = 400;
-      message = "Validation Error";
-      errors = err.errors.map((el) => el.message);
+      message = err?.errors[0]?.message || 'Internal Server Error';
+      break;
+    
+    case "SequelizeForeignKeyConstraintError":
+      statusCode = 400;
+      message = 'Invalid Resource ID';
+      break;
+    
+    case "AggregateError":
+      statusCode = 400;
+      message = err?.errors[0]?.errors?.errors[0]?.message;
       break;
 
     case "NotFoundError":
@@ -52,9 +60,7 @@ function errorHandler(err, req, res, next) {
       console.log(err);
   }
 
-  let JSONResponse = {statusCode, message};
-  if (errors) JSONResponse.errors = errors;
-  res.status(statusCode).json(JSONResponse);
+  res.status(statusCode).json({statusCode, message});
 }
 
 module.exports = errorHandler;

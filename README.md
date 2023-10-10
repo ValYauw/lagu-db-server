@@ -1,3 +1,21 @@
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-718a45dd9cf7e7f842a935f5ebbe5719a5e09af4491e668f4dbf3b35d5cca122.svg)](https://classroom.github.com/online_ide?assignment_repo_id=11640218&assignment_repo_type=AssignmentRepo)
-# fsjs-p2-v2-iproject-server
-Individual Project - Server
+# LaguDB - Server
+
+Lagu - Indonesian for "song".
+
+Modelled after Last.fm, Discogs, and VocaDB, LaguDB is an aggregate platform for musical artists, songs, albums, and the like. With LaguDB you can follow your favourite artists and keep updated on their latest songs. In addition, LaguDB also has a novel feature - auto-timed lyrics, or lyrics that play along with the music video in real time. 
+
+## Application Demo
+
+## Tech Stack & Features
+
+ - Monolithic Architecture (Express.js REST API)
+ - PostgreSQL Database
+ - ORM Sequelize
+ - Google Login (OAuth)
+ - CRUD (Create, Read, Update, Destroy) songs, albums, artists
+ - Integration with Third Party APIs (YouTube Data and VocaDB public API)
+ - Integration with the YouTube IFrame API on the front-end to render auto-timed lyrics
+
+## Database Schema
+
+![ERD](ERD.png)

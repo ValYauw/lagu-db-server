@@ -9,6 +9,7 @@ class Controller {
   static async login(req, res, next) {
     try {
       const { email, password } = req.body;
+      if (!email || !password) throw { name: 'InvalidLogin' };
       const user = await User.findOne({where: {email}});
       if (!user) throw { name: 'InvalidLogin' };
       if (!compare(password, user.password)) throw { name: 'InvalidLogin' };
@@ -16,7 +17,7 @@ class Controller {
         id: user.id, 
         username: user.username,
         role: user.role
-      }, '7d');
+      }, '30d');
       res.status(200).json({
         access_token: accessToken
       });
@@ -28,11 +29,12 @@ class Controller {
   static async register(req, res, next) {
     try {
       const { username, email, password } = req.body;
-      const user = await User.create({
-        username, email, password
+      await User.create({
+        username, email, password, role: 'User'
       });
-      delete user.dataValues.password;
-      res.status(201).json(user);
+      res.status(201).json({
+        message: 'Registration successful'
+      });
     } catch(err) {
       next(err);
     }
@@ -59,7 +61,7 @@ class Controller {
         hooks: false
       })
       const { id, username, role } = user;
-      const accessToken = signToken({id, username, role}, '7d');
+      const accessToken = signToken({id, username, role}, '30d');
       res.status(200).json({
         access_token: accessToken
       });

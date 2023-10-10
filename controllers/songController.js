@@ -1,9 +1,11 @@
 const { 
   User,
-  Genre, Song, Artist, Album,
-  SongGenre, SongArtist, AlbumSong,
+  Genre, Song, Artist,
+  SongGenre, SongArtist,
   PlayLink, ArtistLink, TimedLyrics, sequelize
 } = require("../models");
+const updateSubResources = require('../helpers/updateSubResources');
+const {Op} = require('sequelize');
 const parser = require('subtitles-parser-vtt');
 
 class SongController {
@@ -18,24 +20,25 @@ class SongController {
       if (limit > 100) limit = 100;
 
       const songs = await Song.findAndCountAll({
-        order: [['name', 'ASC']],
+        order: [
+          ['createdAt', 'DESC'],
+          ['name', 'ASC'],
+          ['id', 'ASC']
+        ],
         // order: sequelize.literal('"Song"."createdAt" DESC'),
         attributes: {
-          exclude: ['createdAt', 'updatedAt']
+          exclude: ['updatedAt']
         },
         include: [
-          // {
-          //   model: Genre,
-          //   attributes: ['id', 'name'],
-          //   through: {attributes: []}
-          // },
           {
             model: Artist,
+            as: 'artists',
             attributes: ['id', 'name', 'aliases'],
             through: {attributes: []}
           },
           {
             model: PlayLink,
+            as: 'links',
             attributes: ['id', 'songURL', 'isInactive']
           }
         ],
@@ -64,32 +67,44 @@ class SongController {
         include: [
           {
             model: Song,
+            as: 'basedOn',
             attributes: {
-              exclude: ['createdAt', 'updatedAt']
-            },
-            as: 'Children'
+              exclude: ['parentId', 'createdAt', 'updatedAt']
+            }
+          },
+          {
+            model: Song,
+            as: 'derivatives',
+            attributes: {
+              exclude: ['parentId', 'createdAt', 'updatedAt']
+            }
           },
           {
             model: Genre,
+            as: 'genres',
             attributes: ['id', 'name'],
-            through: {attributes: []}
+            through: { attributes: [] }
           },
           {
             model: Artist,
+            as: 'artists',
             attributes: ['id', 'name', 'aliases'],
-            through: {attributes: []}
+            through: { attributes: ['role'] }
           },
-          {
-            model: Album,
-            attributes: ['id', 'name', 'aliases', 'releaseDate'],
-            through: {attributes: []}
-          },
+          // {
+          //   model: Album,
+          //   as: 'albums',
+          //   attributes: ['id', 'name', 'aliases', 'releaseDate'],
+          //   through: {attributes: []}
+          // },
           {
             model: PlayLink,
+            as: 'links',
             attributes: ['id', 'songURL', 'isInactive']
           },
           {
             model: TimedLyrics,
+            as: 'timedLyrics',
             attributes: ['id', 'timedLyrics']
           }
         ]
@@ -102,11 +117,15 @@ class SongController {
       //   const arr = parser.fromVtt(timedLyrics, 'ms');
       //   return {id, parsedSrt: arr};
       // });
-      if (song.TimedLyric) {
-        song.TimedLyric = {
-          id: song.TimedLyric.id,
-          parsedSrt: parser.fromVtt(song.TimedLyric.timedLyrics, 'ms')
-        }
+      if (song.artists) {
+        song.artists = song.artists.map(el => {
+          const { id, name, aliases } = el;
+          const role = el.SongArtist.role;
+          return { id, name, aliases, role };
+        })
+      }
+      if (song.timedLyrics) {
+        song.timedLyrics = parser.fromVtt(song.timedLyrics.timedLyrics, 'ms');
       }
 
       res.status(200).json(song);
@@ -116,51 +135,106 @@ class SongController {
   }
 
   static async addSong(req, res, next) {
+    const t = await sequelize.transaction();
     try {
-      let { name, aliases, releaseDate, songType, parentId, artists, playLinks } = req.body;
+      let { name, aliases, releaseDate, songType, parentId, artists, links } = req.body;
+
+      // Main entity
       if (!aliases?.length) aliases = null;
+      if (!releaseDate) releaseDate = null;
+      if (!songType) songType = 'Original';
       if (!parentId) parentId = null;
-      let song = await Song.create({name, aliases, releaseDate, songType, parentId});
+      let song = await Song.create(
+        { name, aliases, releaseDate, songType, parentId }, 
+        { transaction: t }
+      );
+
+      // SongArtist Nested Resource
       if (artists && artists?.length) {
         const addArtists = artists.map(artist => {
           const { id: ArtistId, role } = artist;
           return { SongId: song.id, ArtistId, role };
         });
-        await SongArtist.bulkCreate(addArtists);
+        await SongArtist.bulkCreate(addArtists, { 
+          validate: true,
+          transaction: t 
+        });
       }
-      if (playLinks && playLinks?.length) {
-        const addPlayLinks = playLinks.map(playLink => {
+
+      // PlayLink Nested Resource
+      if (links && links?.length) {
+        const addPlayLinks = links.map(playLink => {
           const { songURL, isInactive } = playLink;
           return { songURL, isInactive, SongId: song.id }
         });
-        await PlayLink.bulkCreate(addPlayLinks);
+        await PlayLink.bulkCreate(addPlayLinks, { 
+          validate: true,
+          transaction: t 
+        });
       }
-      song = await Song.findOne({
-        where: {id: song.id}, 
-        include: [
-          { model: Artist, through: { attributes: [] } }, 
-          { model: PlayLink }
-        ]
+      await t.commit();
+
+      res.status(201).json({
+        message: 'Successfully created song'
       });
-      res.status(201).json(song);
+      
     } catch(err) {
+      await t.rollback();
       next(err);
     }
   }
   static async editSong(req, res, next) {
+    const t = await sequelize.transaction();
     try {
       const { id } = req.params;
-      let { name, aliases, releaseDate, songType, parentId } = req.body;
+      if (!id || isNaN(id)) throw { name: 'NotFoundError' };
+      let song = await Song.findByPk(id, {attributes: ['id']});
+      if (!song) throw { name: 'NotFoundError' };
+
+      let { name, aliases, releaseDate, songType, parentId, artists, links } = req.body;
+      name = name || '';
       if (!aliases?.length) aliases = null;
-      let [numUpdated, song] = await Song.update(
-        {name, aliases, releaseDate, songType, parentId}, 
-        {where: {id: +id}}
+      if (!parentId) parentId = null;
+      artists = artists || [];
+      links = links || [];
+
+      // Main Entity
+      await Song.update(
+        { name, aliases, releaseDate, songType, parentId }, 
+        {
+          where: {id: +id},
+          transaction: t
+        }
       );
-      if (numUpdated === 0) throw { name: 'NotFoundError' };
-      res.status(200).json({
-        message: 'Edited song data'
+
+      // Nested resource: Artists
+      await updateSubResources({
+        model: SongArtist,
+        foreignKey: 'SongId', 
+        mainResourceId: song.id, 
+        resources: artists.map(el => ({
+          ArtistId: el.id,
+          role: el.role 
+        })), 
+        transaction: t
       });
+
+      // Nested resource: Playlinks
+      await updateSubResources({
+        model: PlayLink,
+        foreignKey: 'SongId', 
+        mainResourceId: song.id, 
+        resources: links, 
+        transaction: t
+      });
+
+      await t.commit();
+      res.status(200).json({
+        message: 'Successfully edited song'
+      });
+
     } catch(err) {
+      await t.rollback();
       next(err);
     }
   }
@@ -174,147 +248,50 @@ class SongController {
         where: {id: +id}
       });
       res.status(200).json({
-        message: "Successfully deleted"
+        message: "Successfully deleted song"
       });
     } catch(err) {
       next(err);
     }
   }
-
-  static async addPlayLink(req, res, next) {
+  static async createOrUpdateSongGenres(req, res, next) {
+    const t = await sequelize.transaction();
     try {
+
       const { id } = req.params;
-      let { songURL, isInactive } = req.body;
-      isInactive = !!isInactive;
-      if (isNaN(id)) throw {name: "NotFoundError"};
-      const artist = await Artist.findByPk(+id);
-      if (!artist) throw {name: "NotFoundError"};
-      await PlayLink.create({ songURL, isInactive, SongId: +id });
-      res.status(201).json({
-        message: "Successfully added play link to song"
+      if (!id || isNaN(id)) throw { name: 'NotFoundError' }
+      const { genres } = req.body;
+      if (!genres) throw { name: 'BadCredentials', message: 'Song genres must not be null' }
+      if (!genres.every(el => !!el.id)) throw { name: 'BadCredentials', message: 'Song genres must not be null' }
+
+      const song = await Song.findByPk(+id, { attributes: ['id'] });
+      if (!song) throw { name: 'NotFoundError' };
+
+      await SongGenre.destroy({
+        where: {
+          GenreId: { [Op.notIn]: genres.map(el => el.id) },
+          SongId: song.id
+        },
+        transaction: t
+      });
+      await SongGenre.bulkCreate(
+        genres.map(el => ({
+          GenreId: el.id,
+          SongId: song.id
+        })), {
+          ignoreDuplicate: true,
+          transaction: t
+        }
+      );
+      await t.commit();
+      res.status(200).json({
+        message: 'Successfully edited song genres'
       });
     } catch (err) {
+      await t.rollback();
       next(err);
     }
   }
-  static async deletePlayLink(req, res, next) {
-    try {
-      const { id, playLinkId } = req.params;
-      if (isNaN(id) || isNaN(playLinkId)) throw {name: "NotFoundError"};
-      const playlink = await PlayLink.findOne({where: {id: +playLinkId}});
-      if (!playlink || playlink.SongId !== +id) throw {name: "NotFoundError"};
-      await PlayLink.destroy({where: {id: +playLinkId}});
-      res.status(200).json({
-        message: "Successfully removed play link from song"
-      });
-    } catch(err) {
-      next(err);
-    }
-  }
-  static async editPlayLinkStatus(req, res, next) {
-    try {
-      const { id, playLinkId } = req.params;
-      const { isInactive } = req.body;
-      if (isNaN(id) || isNaN(playLinkId)) throw {name: "NotFoundError"};
-      const [numRecordsUpdated, playlinks] = await PlayLink.update(
-        { isInactive },
-        { where: {id: +playLinkId, SongId: +id}, returning: true }
-      );
-      if (numRecordsUpdated === 0) throw {name: 'NotFoundError'};
-      res.status(200).json({
-        message: "Successfully updated status"
-      });
-    } catch(err) {
-      next(err);
-    }
-  }
-
-  static async addSongGenre(req, res, next) {
-    try {
-      const { id, genreId } = req.params;
-      if (isNaN(id) || isNaN(genreId)) throw {name: "NotFoundError"};
-      const [song, genre] = await Promise.all([
-        Song.findByPk(+id),
-        Genre.findByPk(+genreId)
-      ])
-      if (!song || !genre) throw {name: "NotFoundError"};
-      await SongGenre.create({SongId: +id, GenreId: +genreId});
-      res.status(201).json({
-        message: "Successfully added genre to song"
-      });
-    } catch (err) {
-      next(err);
-    }
-  }
-  static async deleteSongGenre(req, res, next) {
-    try {
-      const { id, genreId } = req.params;
-      if (isNaN(id) || isNaN(genreId)) throw {name: "NotFoundError"};
-      const songGenre = await SongGenre.findOne({
-        where: {SongId: +id, GenreId: +genreId}
-      });
-      if (!songGenre) throw {name: "NotFoundError"};
-      await SongGenre.destroy({where: {SongId: +id, GenreId: +genreId}});
-      res.status(200).json({
-        message: "Successfully removed song genre"
-      });
-    } catch(err) {
-      next(err);
-    }
-  }
-
-  static async addSongArtist(req, res, next) {
-    try {
-      const { id, artistId } = req.params;
-      const { role } = req.body;
-      if (isNaN(id) || isNaN(artistId)) throw {name: "NotFoundError"};
-      const [song, artist] = await Promise.all([
-        Song.findByPk(+id),
-        Artist.findByPk(+artistId)
-      ]);
-      if (!song || !artist) throw {name: "NotFoundError"};
-      await SongArtist.create({SongId: +id, ArtistId: +artistId, role});
-      res.status(201).json({
-        message: "Successfully added artist to song"
-      });
-    } catch(err) {
-      next(err);
-    }
-  }
-  static async deleteSongArtist(req, res, next) {
-    try {
-      const { id, artistId } = req.params;
-      if (isNaN(id) || isNaN(artistId)) throw {name: "NotFoundError"};
-      const songArtist = await SongArtist.findOne({
-        where: {SongId: +id, ArtistId: +artistId}
-      });
-      if (!songArtist) throw {name: "NotFoundError"};
-      await SongArtist.destroy({where: {SongId: +id, ArtistId: +artistId}});
-      res.status(200).json({
-        message: "Successfully removed artist from song"
-      });
-    } catch(err) {
-      next(err);
-    }
-  }
-  static async editSongArtistRole(req, res, next) {
-    try {
-      const { id, artistId } = req.params;
-      const { role } = req.body;
-      if (isNaN(id) || isNaN(artistId)) throw {name: "NotFoundError"};
-      const [numRecordsUpdated, songArtists] = await SongArtist.update(
-        { role },
-        { where: {SongId: +id, ArtistId: +artistId}, returning: true }
-      );
-      if (numRecordsUpdated === 0) throw {name: 'NotFoundError'};
-      res.status(200).json({
-        message: "Successfully updated artist"
-      });
-    } catch(err) {
-      next(err);
-    }
-  }
-
 }
 
 module.exports = SongController;

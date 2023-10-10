@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon bin/www",
-    "test": "jest --detectOpenHandles --forceExit"
+    "test": "jest --detectOpenHandles --forceExit --silent",
+    "test-coverage": "jest --detectOpenHandles --forceExit --silent --coverage"
   },
   "keywords": [],
   "author": "",
