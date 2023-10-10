@@ -5,6 +5,7 @@ const {
   PlayLink, ArtistLink, TimedLyrics, sequelize
 } = require("../models");
 const updateSubResources = require('../helpers/updateSubResources');
+const {Op} = require('sequelize');
 const parser = require('subtitles-parser-vtt');
 
 class SongController {
@@ -261,18 +262,30 @@ class SongController {
       if (!id || isNaN(id)) throw { name: 'NotFoundError' }
       const { genres } = req.body;
       if (!genres) throw { name: 'BadCredentials', message: 'Song genres must not be null' }
+      if (!genres.every(el => !!el.id)) throw { name: 'BadCredentials', message: 'Song genres must not be null' }
 
-      await updateSubResources({
-        model: SongGenre,
-        foreignKey: 'SongId', 
-        mainResourceId: +id, 
-        resources: genres, 
+      const song = await Song.findByPk(+id, { attributes: ['id'] });
+      if (!song) throw { name: 'NotFoundError' };
+
+      await SongGenre.destroy({
+        where: {
+          GenreId: { [Op.notIn]: genres.map(el => el.id) },
+          SongId: song.id
+        },
         transaction: t
       });
-
+      await SongGenre.bulkCreate(
+        genres.map(el => ({
+          GenreId: el.id,
+          SongId: song.id
+        })), {
+          ignoreDuplicate: true,
+          transaction: t
+        }
+      );
       await t.commit();
       res.status(200).json({
-        message: 'Successfully edited song'
+        message: 'Successfully edited song genres'
       });
     } catch (err) {
       await t.rollback();

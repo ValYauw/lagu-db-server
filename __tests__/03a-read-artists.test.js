@@ -228,6 +228,9 @@ const songArtists = [
 /* 
  * END SEED DATA
  */
+let admin_access_token;
+let staff_access_token;
+let user_access_token;
 beforeAll(async () => {
 
   await sequelize.queryInterface.bulkInsert('Users', users.map(el => {
@@ -245,7 +248,6 @@ beforeAll(async () => {
       email: users[0].email,
       password: users[0].password
     });
-  console.log(response);
   admin_access_token = response.body.access_token;
   
   response = await request(app)

@@ -5,7 +5,6 @@ const {
   PlayLink, ArtistLink, sequelize
 } = require("../models");
 const updateSubResources = require('../helpers/updateSubResources');
-const {Op} = require('sequelize');
 
 class ArtistController {
 
