@@ -16,6 +16,7 @@ module.exports = {
       parentId: {
         type: Sequelize.INTEGER,
         onDelete: 'SET NULL',
+        onUpdate: 'CASCADE',
         references: {
           model: 'Genres',
           key: 'id'

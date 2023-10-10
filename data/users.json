@@ -3,28 +3,7 @@
     "id": 1,
     "username": "Valerie Yauw",
     "email": "valerie.yauw@gmail.com",
-    "password": "admin",
+    "password": "password",
     "role": "Admin"
-  },
-  {
-    "id": 2,
-    "username": "John Doe",
-    "email": "john.doe@mail.com",
-    "password": "admin",
-    "role": "Staff"
-  },
-  {
-    "id": 3,
-    "username": "Jane Doe",
-    "email": "jane.doe@mail.com",
-    "password": "admin",
-    "role": "Staff"
-  },
-  {
-    "id": 4,
-    "username": "Hewey",
-    "email": "hewey.duck@mail.com",
-    "password": "admin",
-    "role": "User"
   }
 ]

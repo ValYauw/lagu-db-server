@@ -15,7 +15,9 @@ module.exports = {
         references: {
           model: 'Songs',
           key: 'id'
-        }
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
       },
       timedLyrics: {
         type: Sequelize.TEXT,

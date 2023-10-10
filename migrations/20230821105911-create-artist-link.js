@@ -25,6 +25,7 @@ module.exports = {
       ArtistId: {
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
         allowNull: false,
         references: {
           model: 'Artists',
