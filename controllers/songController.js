@@ -292,6 +292,77 @@ class SongController {
       next(err);
     }
   }
+  static async addTimedLyrics(req, res, next) {
+    try {
+      const { id } = req.params;
+      if (!id || isNaN(id)) throw { name: 'NotFoundError' };
+      const song = await Song.findByPk(+id);
+      if (!song) throw { name: 'NotFoundError' };
+      let { srt } = req.body;
+      srt = srt?.trim() || '';
+      if (!srt) throw { name: 'BadCredentials', message: 'SubRip Text contents required.' };
+      const parsed = parser.fromVtt(srt, 'ms');
+      if (!parsed?.length) throw { name: 'BadCredentials', message: 'Invalid SubRip Text contents.' };
+      await TimedLyrics.create({
+        SongId: +id,
+        timedLyrics: srt
+      });
+      res.status(201).json({
+        message: 'Successfully added lyrics'
+      });
+    } catch(err) {
+      next(err);
+    }
+  }
+  static async updateTimedLyrics(req, res, next) {
+    try {
+      const { id, lyricsId } = req.params;
+      if (!id || isNaN(id)) throw { name: 'NotFoundError' };
+      if (!lyricsId || isNaN(lyricsId)) throw { name: 'NotFoundError' };
+      const timedLyrics = await TimedLyrics.findOne({
+        attributes: ['id', 'SongId'],
+        where: { id: +lyricsId }
+      });
+      if (!timedLyrics) throw { name: 'NotFoundError' };
+      if (timedLyrics.SongId !== +id) throw { name: 'Forbidden' };
+      let { srt } = req.body;
+      srt = srt?.trim() || '';
+      if (!srt) throw { name: 'BadCredentials', message: 'SubRip Text contents required.' };
+      const parsed = parser.fromVtt(srt, 'ms');
+      if (!parsed?.length) throw { name: 'BadCredentials', message: 'Invalid SubRip Text contents.' };
+      await TimedLyrics.update({
+        timedLyrics: srt
+      }, {
+        where: { id: timedLyrics.id }
+      });
+      res.status(200).json({
+        message: 'Successfully edited lyrics'
+      });
+    } catch(err) {
+      next(err);
+    }
+  }
+  static async deleteTimedLyrics(req, res, next) {
+    try {
+      const { id, lyricsId } = req.params;
+      if (!id || isNaN(id)) throw { name: 'NotFoundError' };
+      if (!lyricsId || isNaN(lyricsId)) throw { name: 'NotFoundError' };
+      const timedLyrics = await TimedLyrics.findOne({
+        attributes: ['id', 'SongId'],
+        where: { id: +lyricsId }
+      });
+      if (!timedLyrics) throw { name: 'NotFoundError' };
+      if (timedLyrics.SongId !== +id) throw { name: 'Forbidden' };
+      await TimedLyrics.destroy({
+        where: { id: timedLyrics.id }
+      });
+      res.status(200).json({
+        message: 'Successfully deleted lyrics'
+      })
+    } catch(err) {
+      next(err);
+    }
+  }
 }
 
 module.exports = SongController;

@@ -297,14 +297,14 @@ describe('POST genre', () => {
 
   });
 
-  it('should successfully add a genre with a staff access token', async () => {
+  it('should fail to add a genre with a staff access token', async () => {
     const response = await request(app)
       .post(entrypoints.genres)
       .set('access_token', staff_access_token)
       .send({
         name: 'Folk'
       });
-    expect(response.statusCode).toBe(201);
+    expect(response.statusCode).toBe(403);
   });
 
   it('should fail to add a genre with a user access token', async () => {

@@ -52,8 +52,9 @@ router.use(authentication);
 /* 
  * POST METHODS
  */
-router.post('/genres', authorizeStaff, GenreController.addGenre);
+router.post('/genres', authorizeAdmin, GenreController.addGenre);
 router.post('/songs', authorizeStaff, SongController.addSong);
+router.post('/songs/:id/timed-lyrics', authorizeStaff, SongController.addTimedLyrics);
 router.post('/artists', authorizeStaff, ArtistController.addArtist);
 
 /* 
@@ -62,6 +63,7 @@ router.post('/artists', authorizeStaff, ArtistController.addArtist);
 router.put('/genres/:id', authorizeAdmin, GenreController.editGenre);
 router.put('/songs/:id', authorizeStaff, SongController.editSong);
 router.put('/songs/:id/genres', authorizeStaff, SongController.createOrUpdateSongGenres);
+router.put('/songs/:id/timed-lyrics/:lyricsId', authorizeStaff, SongController.updateTimedLyrics);
 router.put('/artists/:id', authorizeStaff, ArtistController.editArtist);
 
 /* 
@@ -69,6 +71,7 @@ router.put('/artists/:id', authorizeStaff, ArtistController.editArtist);
  */
 router.delete('/genres/:id', authorizeAdmin, GenreController.deleteGenre);
 router.delete('/songs/:id', authorizeAdmin, SongController.deleteSong);
+router.delete('/songs/:id/timed-lyrics/:lyricsId', authorizeAdmin, SongController.deleteTimedLyrics);
 router.delete('/artists/:id', authorizeAdmin, ArtistController.deleteArtist);
 
 module.exports = router;
