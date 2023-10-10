@@ -632,274 +632,404 @@ describe('POST songs', () => {
 
 });
 
-// describe.only('PUT songs', () => {
+describe('PUT songs', () => {
 
-//   it('should successfully update a song', async () => {
+  it('should successfully update a song', async () => {
 
-//     const testData = {
-//       id: 2,
-//       name: "ドラマツルギー", 
-//       aliases: ["Dramaturgy"], 
-//       releaseDate: "2017-10-11T00:00:00", 
-//       songType: 'Original', 
-//       parentId: null, 
-//       artists: [{
-//         id: 2,
-//         role: 'composer, singer'
-//       }], 
-//       links: [{
-//         songURL: "https://www.youtube.com/watch?v=jJzw1h5CR-I",
-//         isInactive: false
-//       }]
-//     };
+    const testData = {
+      id: 2,
+      name: "Ura Omote Lovers", 
+      aliases: ["裏表ラバーズ"], 
+      releaseDate: "2009-08-26T00:00:00", 
+      songType: 'Cover', 
+      parentId: 1, 
+      artists: [{
+        id: 1,
+        role: 'vocalist',
+      }], 
+      links: [
+        {
+          id: 3,
+          songURL: "https://www.nicovideo.jp/watch/sm8082467",
+          isInactive: false
+        },
+        {
+          id: 4,
+          songURL: "https://www.youtube.com/watch?v=b_cuMcDWwsI",
+          isInactive: false
+        },
+        {
+          id: 5,
+          songURL: "https://piapro.jp/t/NXYR",
+          isInactive: false
+        }
+      ]
+    };
 
-//     const response = await request(app)
-//       .put(entrypoints.songs + '/2')
-//       .set('access_token', admin_access_token)
-//       .send(testData)
-//     expect(response.statusCode).toBe(200);
-//     expect(response.body.message).toBeDefined();
+    const response = await request(app)
+      .put(entrypoints.songs + '/2')
+      .set('access_token', admin_access_token)
+      .send(testData)
+    expect(response.statusCode).toBe(200);
+    expect(response.body.message).toBeDefined();
 
-//     const fetchResponse = await request(app)
-//       .get(entrypoints.songs + '/2');
-//     const { name, aliases, imageURL, description, links } = fetchResponse.body;
-//     expect(name).toBe(testData.name);
-//     expect(aliases).toBeNull();
-//     expect(imageURL).toBe(testData.imageURL);
-//     expect(description).toBe(testData.description);
-//     expect(links).toEqual([
-//       {
-//         id: 3,
-//         webURL: 'https://en.wikipedia.org/wiki/Kagamine_Rin/Len',
-//         description: 'Wikipedia (JP)',
-//         isInactive: false
-//       },
-//       {
-//         id: 4,
-//         webURL: 'https://www.youtube.com/watch?v=abhbaac12f',
-//         description: 'VEVO Account',
-//         isInactive: true
-//       }
-//     ]);
+    const fetchResponse = await request(app)
+      .get(entrypoints.songs + '/2');
+    const { 
+      name, aliases, releaseDate, songType, 
+      basedOn, derivatives, genres, artists, links, timedLyrics 
+    } = fetchResponse.body;
+    expect(name).toBe(testData.name);
+    expect(aliases).toEqual(testData.aliases);
+    const compareDate = new Date(releaseDate);
+    expect(compareDate.getFullYear()).toBe(2009);
+    expect(compareDate.getMonth()).toBe(7);
+    expect(compareDate.getDate()).toBe(26);
+    expect(songType).toBe('Cover');
+    expect(basedOn).not.toBeNull();
+    expect(basedOn.id).toBe(1);
+    expect(derivatives).toEqual([]);
+    expect(genres).toEqual([
+      { id: 1, name: "Pop" },
+      { id: 3, name: "VOCALOID" }
+    ]);
+    expect(artists).toEqual([
+      {
+        id: 1,
+        name: 'Hatsune Miku',
+        aliases: ['Miku Hatsune', 'CV-01'],
+        role: 'vocalist'
+      }
+    ]);
+    expect(links).toEqual([
+      {
+        id: 3,
+        songURL: "https://www.nicovideo.jp/watch/sm8082467",
+        isInactive: false
+      },
+      {
+        id: 4,
+        songURL: "https://www.youtube.com/watch?v=b_cuMcDWwsI",
+        isInactive: false
+      },
+      {
+        id: 5,
+        songURL: "https://piapro.jp/t/NXYR",
+        isInactive: false
+      }
+    ]);
+    expect(timedLyrics).toBeNull();
 
-//   });
+  });
 
-//   it('should successfully update a song with a staff access token', async () => {
+  it('should successfully update a song', async () => {
 
-//     const testData = {
-//       id: 3,
-//       name: 'Kagamine Len',
-//       aliases: [],
-//       imageURL: 'https://image-url.net/efgh',
-//       description: 'Japanese male VOCALOID bank. Released in December 2007.',
-//       links: [
-//         {
-//           id: 5,
-//           webURL: 'https://en.wikipedia.org/wiki/Kagamine_Rin/Len',
-//           description: 'Wikipedia (JP)',
-//           isInactive: false
-//         },
-//         {
-//           id: 6,
-//           webURL: 'https://www.youtube.com/watch?v=abhbaac12f',
-//           description: 'VEVO Account',
-//           isInactive: true
-//         }
-//       ]
-//     };
+    const testData = {
+      id: 2,
+      name: "Two-faced Lovers", 
+      aliases: [], 
+      releaseDate: "2009-08-26T00:00:00", 
+      songType: 'Original', 
+      parentId: null, 
+      artists: [{
+        id: 1,
+        role: 'vocalist',
+      }], 
+      links: [
+        {
+          id: 3,
+          songURL: "https://www.nicovideo.jp/watch/sm8082467",
+          isInactive: false
+        },
+        {
+          id: 4,
+          songURL: "https://www.youtube.com/watch?v=b_cuMcDWwsI",
+          isInactive: false
+        },
+        {
+          id: 5,
+          songURL: "https://piapro.jp/t/NXYR",
+          isInactive: false
+        }
+      ]
+    };
 
-//     const response = await request(app)
-//       .put(entrypoints.songs + '/3')
-//       .set('access_token', staff_access_token)
-//       .send(testData)
-//     expect(response.statusCode).toBe(200);
-//     expect(response.body.message).toBeDefined();
+    const response = await request(app)
+      .put(entrypoints.songs + '/2')
+      .set('access_token', admin_access_token)
+      .send(testData)
+    expect(response.statusCode).toBe(200);
+    expect(response.body.message).toBeDefined();
 
-//     const fetchResponse = await request(app)
-//       .get(entrypoints.songs + '/3');
-//     const { name, aliases, imageURL, description, links } = fetchResponse.body;
-//     expect(name).toBe(testData.name);
-//     expect(aliases).toBeNull();
-//     expect(imageURL).toBe(testData.imageURL);
-//     expect(description).toBe(testData.description);
-//     expect(links).toEqual([
-//       {
-//         id: 5,
-//         webURL: 'https://en.wikipedia.org/wiki/Kagamine_Rin/Len',
-//         description: 'Wikipedia (JP)',
-//         isInactive: false
-//       },
-//       {
-//         id: 6,
-//         webURL: 'https://www.youtube.com/watch?v=abhbaac12f',
-//         description: 'VEVO Account',
-//         isInactive: true
-//       }
-//     ]);
+    const fetchResponse = await request(app)
+      .get(entrypoints.songs + '/2');
+    const { 
+      name, aliases, releaseDate, songType, 
+      basedOn, derivatives, genres, artists, links, timedLyrics 
+    } = fetchResponse.body;
+    expect(name).toBe(testData.name);
+    expect(aliases).toBeNull();
+    const compareDate = new Date(releaseDate);
+    expect(compareDate.getFullYear()).toBe(2009);
+    expect(compareDate.getMonth()).toBe(7);
+    expect(compareDate.getDate()).toBe(26);
+    expect(songType).toBe('Original');
+    expect(basedOn).toBeNull();
+    expect(derivatives).toEqual([]);
+    expect(genres).toEqual([
+      { id: 1, name: "Pop" },
+      { id: 3, name: "VOCALOID" }
+    ]);
+    expect(artists).toEqual([
+      {
+        id: 1,
+        name: 'Hatsune Miku',
+        aliases: ['Miku Hatsune', 'CV-01'],
+        role: 'vocalist'
+      }
+    ]);
+    expect(links).toEqual([
+      {
+        id: 3,
+        songURL: "https://www.nicovideo.jp/watch/sm8082467",
+        isInactive: false
+      },
+      {
+        id: 4,
+        songURL: "https://www.youtube.com/watch?v=b_cuMcDWwsI",
+        isInactive: false
+      },
+      {
+        id: 5,
+        songURL: "https://piapro.jp/t/NXYR",
+        isInactive: false
+      }
+    ]);
+    expect(timedLyrics).toBeNull();
 
-//   });
+  });
 
-//   it('should fail to update a song with a user access token', async () => {
-//     const testData = {
-//       id: 1,
-//       name: 'VY-02',
-//       aliases: [],
-//       imageURL: '',
-//       description: '',
-//       links: []
-//     };
-//     const response = await request(app)
-//       .put(entrypoints.songs + '/1')
-//       .set('access_token', user_access_token)
-//       .send(testData)
-//     expect(response.statusCode).toBe(403);
-//     expect(response.body.message).toBeDefined();
-//   });
+  it('should fail to update a song with a user access token', async () => {
+    const testData = {
+      id: 1,
+      name: "Rolling Girl", 
+      aliases: [], 
+      releaseDate: null, 
+      songType: 'Original', 
+      parentId: null, 
+      artists: [], 
+      links: []
+    };
+    const response = await request(app)
+      .put(entrypoints.songs + '/1')
+      .set('access_token', user_access_token)
+      .send(testData)
+    expect(response.statusCode).toBe(403);
+    expect(response.body.message).toBeDefined();
+  });
 
-//   it('should fail to update a song with no access token', async () => {
-//     const testData = {
-//       id: 1,
-//       name: 'VY-02',
-//       aliases: [],
-//       imageURL: '',
-//       description: '',
-//       links: []
-//     };
-//     const response = await request(app)
-//       .put(entrypoints.songs + '/1')
-//       .send(testData)
-//     expect(response.statusCode).toBe(401);
-//     expect(response.body.message).toBeDefined();
-//   });
+  it('should fail to update a song with no access token', async () => {
+    const testData = {
+      id: 1,
+      name: "Rolling Girl", 
+      aliases: [], 
+      releaseDate: null, 
+      songType: 'Original', 
+      parentId: null, 
+      artists: [], 
+      links: []
+    };
+    const response = await request(app)
+      .put(entrypoints.songs + '/1')
+      .send(testData)
+    expect(response.statusCode).toBe(401);
+    expect(response.body.message).toBeDefined();
+  });
 
-//   it('should fail to update a song with an invalid access token', async () => {
-//     const testData = {
-//       id: 1,
-//       name: 'VY-02',
-//       aliases: [],
-//       imageURL: '',
-//       description: '',
-//       links: []
-//     };
-//     const response = await request(app)
-//       .put(entrypoints.songs + '/1')
-//       .set('access_token', 'ascjvjvjhavjhwbqjhb')
-//       .send(testData)
-//     expect(response.statusCode).toBe(401);
-//     expect(response.body.message).toBeDefined();
-//   });
+  it('should fail to update a song with an invalid access token', async () => {
+    const testData = {
+      id: 1,
+      name: "Rolling Girl", 
+      aliases: [], 
+      releaseDate: null, 
+      songType: 'Original', 
+      parentId: null, 
+      artists: [], 
+      links: []
+    };
+    const response = await request(app)
+      .put(entrypoints.songs + '/1')
+      .set('access_token', 'ascjvjvjhavjhwbqjhb')
+      .send(testData)
+    expect(response.statusCode).toBe(401);
+    expect(response.body.message).toBeDefined();
+  });
 
-//   it('should fail to update a song with no name', async () => {
-//     const testData = {
-//       name: ''
-//     };
-//     const response = await request(app)
-//       .put(entrypoints.songs + '/1')
-//       .set('access_token', admin_access_token)
-//       .send(testData)
-//     expect(response.statusCode).toBe(400);
-//     expect(response.body.message).toBeDefined();
-//     expect(response.body.message).toBe('Artist name is required');
-//   });
+  it('should fail to update a song with no name', async () => {
+    const testData = {
+      id: 1,
+      name: "", 
+      aliases: [], 
+      releaseDate: null, 
+      songType: 'Original', 
+      parentId: null, 
+      artists: [], 
+      links: []
+    };
+    const response = await request(app)
+      .put(entrypoints.songs + '/1')
+      .set('access_token', admin_access_token)
+      .send(testData)
+    expect(response.statusCode).toBe(400);
+    expect(response.body.message).toBeDefined();
+    expect(response.body.message).toBe('Song name is required');
+  });
 
-//   it('should fail to update a song with no data', async () => {
-//     const response = await request(app)
-//       .put(entrypoints.songs + '/1')
-//       .set('access_token', admin_access_token)
-//       .send({})
-//     expect(response.statusCode).toBe(400);
-//     expect(response.body.message).toBeDefined();
-//     expect(response.body.message).toBe('Artist name is required');
-//   });
+  it('should fail to update a song with no data', async () => {
+    const response = await request(app)
+      .put(entrypoints.songs + '/1')
+      .set('access_token', admin_access_token)
+      .send({})
+    expect(response.statusCode).toBe(400);
+    expect(response.body.message).toBeDefined();
+    expect(response.body.message).toBe('Song name is required');
+  });
 
-//   it('should successfully update a song\'s nested resources', async () => {
+  it('should successfully update a song\'s nested resources', async () => {
 
-//     const testData = {
-//       id: 2,
-//       name: 'Kagamine Rin',
-//       aliases: [],
-//       imageURL: 'https://image-url.net/abcd',
-//       description: 'Japanese female VOCALOID bank. Released in December 2007.',
-//       links: [
-//         {
-//           id: 4,
-//           webURL: 'https://www.youtube.com/watch?v=bbajjcakmw',
-//           description: 'VEVO Account',
-//           isInactive: true
-//         },
-//         {
-//           webURL: 'https://vocadb.net',
-//           description: 'VOCALOID database',
-//           isInactive: false
-//         },
-//       ]
-//     };
+    const testData = {
+      id: 3,
+      name: "アンハッピーリフレイン", 
+      aliases: ["Unhappy Refrain"], 
+      releaseDate: "2011-05-02T00:00:00", 
+      songType: 'Original', 
+      parentId: null, 
+      artists: [
+        {
+          id: 1,
+          role: 'vocal synth',
+        },
+        {
+          id: 2,
+          role: 'producer',
+        }
+      ], 
+      links: [
+        {
+          id: 7,
+          songURL: "https://www.youtube.com/watch?v=uTlv9VWAcso",
+          isInactive: false
+        },
+        {
+          songURL: "https://piapro.jp/fg12",
+          isInactive: true
+        }
+      ]
+    };
 
-//     const response = await request(app)
-//       .put(entrypoints.songs + '/2')
-//       .set('access_token', admin_access_token)
-//       .send(testData)
-//     expect(response.statusCode).toBe(200);
-//     expect(response.body.message).toBeDefined();
+    const response = await request(app)
+      .put(entrypoints.songs + '/3')
+      .set('access_token', admin_access_token)
+      .send(testData)
+    expect(response.statusCode).toBe(200);
+    expect(response.body.message).toBeDefined();
 
-//     const fetchResponse = await request(app)
-//       .get(entrypoints.songs + '/2');
-//     const { name, aliases, imageURL, description, links } = fetchResponse.body;
-//     expect(name).toBe(testData.name);
-//     expect(aliases).toBeNull();
-//     expect(imageURL).toBe(testData.imageURL);
-//     expect(description).toBe(testData.description);
-//     expect(links).toEqual([
-//       {
-//         id: 4,
-//         webURL: 'https://www.youtube.com/watch?v=bbajjcakmw',
-//         description: 'VEVO Account',
-//         isInactive: true
-//       },
-//       {
-//         id: 7,
-//         webURL: 'https://vocadb.net',
-//         description: 'VOCALOID database',
-//         isInactive: false
-//       }
-//     ]);
+    const fetchResponse = await request(app)
+      .get(entrypoints.songs + '/3');
+    const { 
+      name, aliases, releaseDate, songType, 
+      basedOn, derivatives, genres, artists, links, timedLyrics 
+    } = fetchResponse.body;
+    expect(name).toBe(testData.name);
+    expect(aliases).toEqual(testData.aliases);
+    const compareDate = new Date(releaseDate);
+    expect(compareDate.getFullYear()).toBe(2011);
+    expect(compareDate.getMonth()).toBe(4);
+    expect(compareDate.getDate()).toBe(2);
+    expect(songType).toBe('Original');
+    expect(basedOn).toBeNull();
+    expect(derivatives).toBeDefined();
+    expect(genres).toEqual([
+      { id: 1, name: "Pop" },
+      { id: 3, name: "VOCALOID" }
+    ]);
+    expect(artists).toEqual([
+      {
+        id: 1,
+        name: 'Hatsune Miku',
+        aliases: ['Miku Hatsune', 'CV-01'],
+        role: 'vocal synth'
+      },
+      {
+        id: 2,
+        name: 'Eve',
+        aliases: null,
+        role: 'producer'
+      }
+    ]);
+    expect(links).toEqual([
+      {
+        id: 7,
+        songURL: "https://www.youtube.com/watch?v=uTlv9VWAcso",
+        isInactive: false
+      },
+      {
+        id: 11,
+        songURL: "https://piapro.jp/fg12",
+        isInactive: true
+      },
+    ]);
+    expect(timedLyrics).toBeNull();
 
-//   });
+  });
 
-//   it('should fail to update a song\'s nested resources if failed validation checks', async () => {
+  it('should fail to update a song\'s nested resources if failed validation checks', async () => {
 
-//     const testData = {
-//       id: 3,
-//       name: 'Kagamine Len',
-//       aliases: [],
-//       imageURL: 'https://image-url.net/efgh',
-//       description: 'Japanese male VOCALOID bank. Released in December 2007.',
-//       links: [
-//         {
-//           id: 5,
-//           webURL: '',
-//           description: 'Wikipedia (JP)',
-//           isInactive: false
-//         },
-//         {
-//           id: 6,
-//           webURL: 'https://www.youtube.com/watch?v=abhbaac12f',
-//           description: 'VEVO Account',
-//           isInactive: true
-//         }
-//       ]
-//     };
+    const testData = {
+      id: 3,
+      name: "アンハッピーリフレイン", 
+      aliases: ["Unhappy Refrain"], 
+      releaseDate: "2011-05-02T00:00:00", 
+      songType: 'Original', 
+      parentId: null, 
+      artists: [
+        {
+          id: 1,
+          role: 'vocal synth',
+        },
+        {
+          id: 2,
+          role: 'producer',
+        }
+      ], 
+      links: [
+        {
+          id: 7,
+          songURL: "https://www.youtube.com/watch?v=uTlv9VWAcso",
+          isInactive: false
+        },
+        {
+          id: 11,
+          songURL: "https://piapro.jp/fg12",
+          isInactive: true
+        },
+        {
+          songURL: "image-url",
+          isInactive: false
+        },
+      ]
+    };
 
-//     const response = await request(app)
-//       .put(entrypoints.songs + '/3')
-//       .set('access_token', admin_access_token)
-//       .send(testData)
-//     expect(response.statusCode).toBe(400);
-//     expect(response.body.message).toBeDefined();
+    const response = await request(app)
+      .put(entrypoints.songs + '/3')
+      .set('access_token', admin_access_token)
+      .send(testData)
+    expect(response.statusCode).toBe(400);
+    expect(response.body.message).toBeDefined();
 
-//   });
+  });
 
-// });
+});
 
 describe('DELETE songs', () => {
 

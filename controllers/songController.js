@@ -191,6 +191,7 @@ class SongController {
       if (!song) throw { name: 'NotFoundError' };
 
       let { name, aliases, releaseDate, songType, parentId, artists, links } = req.body;
+      name = name || '';
       if (!aliases?.length) aliases = null;
       if (!parentId) parentId = null;
       artists = artists || [];
@@ -210,7 +211,10 @@ class SongController {
         model: SongArtist,
         foreignKey: 'SongId', 
         mainResourceId: song.id, 
-        resources: artists, 
+        resources: artists.map(el => ({
+          ArtistId: el.id,
+          role: el.role 
+        })), 
         transaction: t
       });
 
