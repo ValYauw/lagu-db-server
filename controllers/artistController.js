@@ -19,9 +19,13 @@ class ArtistController {
       if (limit > 100) limit = 100;
 
       const artists = await Artist.findAndCountAll({
-        order: [['createdAt', 'DESC'], ['name', 'ASC']],
+        order: [
+          ['createdAt', 'DESC'], 
+          ['name', 'ASC'],
+          ['id', 'ASC']
+        ],
         attributes: {
-          exclude: ['createdAt', 'updatedAt'],
+          exclude: ['updatedAt'],
           include: [
             [sequelize.cast(sequelize.literal(
               '(SELECT COUNT("SongArtist"."id") FROM "SongArtists" AS "SongArtist" WHERE "SongArtist"."ArtistId" = "Artist"."id")'

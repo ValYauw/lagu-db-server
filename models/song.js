@@ -5,6 +5,12 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Song extends Model {
     static associate(models) {
+      Song.belongsTo(Song, {
+        as: 'basedOn',
+        foreignKey: 'parentId',
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE'
+      });
       Song.hasMany(Song, {
         as: 'derivatives',
         foreignKey: 'parentId',

@@ -19,10 +19,14 @@ class SongController {
       if (limit > 100) limit = 100;
 
       const songs = await Song.findAndCountAll({
-        order: [['name', 'ASC']],
+        order: [
+          ['createdAt', 'DESC'],
+          ['name', 'ASC'],
+          ['id', 'ASC']
+        ],
         // order: sequelize.literal('"Song"."createdAt" DESC'),
         attributes: {
-          exclude: ['createdAt', 'updatedAt']
+          exclude: ['updatedAt']
         },
         include: [
           {
@@ -62,9 +66,16 @@ class SongController {
         include: [
           {
             model: Song,
+            as: 'basedOn',
+            attributes: {
+              exclude: ['parentId', 'createdAt', 'updatedAt']
+            }
+          },
+          {
+            model: Song,
             as: 'derivatives',
             attributes: {
-              exclude: ['createdAt', 'updatedAt']
+              exclude: ['parentId', 'createdAt', 'updatedAt']
             }
           },
           {
@@ -105,11 +116,8 @@ class SongController {
       //   const arr = parser.fromVtt(timedLyrics, 'ms');
       //   return {id, parsedSrt: arr};
       // });
-      if (song.TimedLyric) {
-        song.TimedLyric = {
-          id: song.TimedLyric.id,
-          parsedSrt: parser.fromVtt(song.TimedLyric.timedLyrics, 'ms')
-        }
+      if (song.timedLyrics) {
+        song.timedLyrics = parser.fromVtt(song.timedLyrics.timedLyrics, 'ms');
       }
 
       res.status(200).json(song);
