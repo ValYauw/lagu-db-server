@@ -88,7 +88,7 @@ Table of Contents
 <tr>
 <td>GET</td>
 <td><code>/genres/:id</code></td>
-<td>Gets a genre by ID, along with its sub-genres.</td>
+<td>Gets a genre by ID, along with its sub-genres and parent genre (if any).</td>
 </tr>
 <tr>
 <td>PUT</td>
@@ -180,7 +180,7 @@ Table of Contents
 <tr>
 <td>PUT</td>
 <td><code>/songs/:id/timed-lyrics/:lyricsId</code></td>
-<td>Updates the lyrics for an existing set of timed lyrics for a song in the database.</td>
+<td>Updates an existing set of timed lyrics for a song in the database.</td>
 </tr>
 <tr>
 <td>DELETE</td>
@@ -470,9 +470,17 @@ Response - 201 Created
 }
 ```
 
+Response - 400 Bad Request
+```json
+{
+  "statusCode": 400,
+  "message": "Genre name is required"
+}
+```
+
 ### GET /genres/:id
 
-Gets a genre by ID, along with its sub-genres.
+Gets a genre by ID, along with its sub-genres and parent genre (if any).
 
 Path Parameters
  - `id`: Genre ID
@@ -527,6 +535,14 @@ Response - 200 OK
 ```json
 {
   "message": "Successfully edited genre"
+}
+```
+
+Response - 400 Bad Request
+```json
+{
+  "statusCode": 400,
+  "message": "Genre name is required"
 }
 ```
 
@@ -605,7 +621,7 @@ Response - 200 OK
 
 ### GET /artists
 
-Gets the list of artists stored in the database.
+Gets the list of artists stored in the database, including the number of their songs registered in the database.
 
 Query Parameters
  - `limit`: Number of records to fetch per API call.
@@ -672,6 +688,19 @@ Response - 201 Created
 ```json
 {
   "message": "Successfully created artist"
+}
+```
+
+Response - 400 Bad Request
+```json
+{
+  "statusCode": 400,
+  "message": "Artist name is required"
+}
+
+{
+  "statusCode": 400,
+  "message": "Web URL is not valid"
 }
 ```
 
@@ -760,6 +789,19 @@ Response - 200 OK
 ```json
 {
   "message": "Successfully edited artist"
+}
+```
+
+Response - 400 Bad Request
+```json
+{
+  "statusCode": 400,
+  "message": "Artist name is required"
+}
+
+{
+  "statusCode": 400,
+  "message": "Web URL is not valid"
 }
 ```
 
@@ -947,6 +989,19 @@ Response - 201 Created
 }
 ```
 
+Response - 400 Bad Request
+```json
+{
+  "statusCode": 400,
+  "message": "Song name is required"
+}
+
+{
+  "statusCode": 400,
+  "message": "Song URL is not valid"
+}
+```
+
 ### GET /songs/:id
 
 Gets data for a specific song in the database, by their ID.
@@ -1068,6 +1123,19 @@ Response - 200 OK
 }
 ```
 
+Response - 400 Bad Request
+```json
+{
+  "statusCode": 400,
+  "message": "Song name is required"
+}
+
+{
+  "statusCode": 400,
+  "message": "Song URL is not valid"
+}
+```
+
 ### DELETE /songs/:id
 
 Deletes data for a specific song in the database, by their ID.
@@ -1120,13 +1188,21 @@ Request - Body
 Response - 200 OK
 ```json
 {
-  "message": "Successfully updated song genres"
+  "message": "Successfully edited song genres"
+}
+```
+
+Response - 400 Bad Request
+```json
+{
+  "statusCode": 400,
+  "message": "Song genres must not be null"
 }
 ```
 
 ### POST /songs/:id/timed-lyrics
 
-Submits a set of timed lyrics for a song in the database.
+Submits a set of timed lyrics for a song in the database. Validation for timed lyrics is done by checking if the sent text is parseable as a SubRip Text (SRT) string.
 
 Path Parameters
  - `id`: Song ID
@@ -1168,7 +1244,7 @@ Response - 400 Bad Request
 
 ### PUT /songs/:id/timed-lyrics/:lyricsId
 
-Updates the lyrics for an existing set of timed lyrics for a song in the database.
+Updates the lyrics for an existing set of timed lyrics for a song in the database. Validation for timed lyrics is done by checking if the sent text is parseable as a SubRip Text (SRT) string.
 
 Path Parameters
  - `id`: Song ID
