@@ -127,7 +127,9 @@ class GenreController {
       const genre = await Genre.create({
         name, parentId
       });
-      res.status(201).json(genre);
+      res.status(201).json({
+        message: 'Successfully added genre'
+      });
     } catch(err) {
       next(err);
     }

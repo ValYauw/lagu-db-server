@@ -285,6 +285,7 @@ describe('POST genre', () => {
         parentId: 2
       });
     expect(response.statusCode).toBe(201);
+    expect(response.body.message).toBeDefined();
 
     const fetchResponse = await request(app)
       .get(entrypoints.genres + '/12');
